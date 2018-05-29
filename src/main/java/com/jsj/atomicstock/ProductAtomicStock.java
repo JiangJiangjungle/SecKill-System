@@ -1,6 +1,6 @@
 package com.jsj.atomicstock;
 
-import com.jsj.bean.Product;
+import com.jsj.entity.Product;
 import com.jsj.mapper.PanicBuyingMapper;
 import org.springframework.stereotype.Component;
 

@@ -14,20 +14,21 @@
         <id column="id" property="productId"/>
         <result column="stock" property="stock"/>
         <result column="price" property="price"/>
-        <result column="productName" property="productName"/>
-        <result column="createTime" property="createTime"/>
+        <result column="product_name" property="productName"/>
+        <result column="create_time" property="createTime"/>
     </resultMap>
 
     <resultMap id="myUser" type="user">
         <id column="id" property="userId"/>
-        <result column="username" property="userName"/>
+        <result column="user_name" property="userName"/>
         <result column="phone" property="phoneNumber"/>
-        <result column="createTime" property="createTime"/>
+        <result column="create_time" property="createTime"/>
     </resultMap>
 
     <resultMap id="myRecord" type="record">
-        <id column="productId" property="productId"/>
-        <result column="userId" property="userId"/>
+        <id column="product_id" property="productId"/>
+        <result column="user_id" property="userId"/>
+        <result column="state" property="state"/>
     </resultMap>
 
 
@@ -48,17 +49,22 @@
     </select>
 
     <select id="getAllRecords" resultMap="myRecord">
-        select userId,productId from tb_record
+        select user_id,product_id from tb_record
     </select>
 
     <insert id="addRecord" useGeneratedKeys="true" keyProperty="id">
-        insert into tb_record(userId, productId, state, stateInfo, createTime)
-        values(#{userId}, #{productId}, #{state}, #{stateInfo}, #{createTime})
+        insert into tb_record(user_id, product_id, state)
+        values(#{userId}, #{productId}, #{state})
     </insert>
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="id">
-        insert into tb_user(username, phone,createTime)
-        values(#{userName}, #{phoneNumber}, #{createTime})
+        insert into tb_user(user_name, phone)
+        values(#{userName}, #{phoneNumber})
+    </insert>
+
+    <insert id="addProduct" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_product(product_name, price, stock)
+        values(#{productName}, #{price}, #{stock})
     </insert>
 
     <insert id="decreaseProductStock">

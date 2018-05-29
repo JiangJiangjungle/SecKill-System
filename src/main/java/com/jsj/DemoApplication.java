@@ -24,6 +24,6 @@ public class DemoApplication {
 
     @RequestMapping("/")
     String index() {
-        return "Hello Spring Boot";
+        return "Panic Buying System";
     }
 }

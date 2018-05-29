@@ -1,8 +1,8 @@
 package com.jsj.mapper;
 
-import com.jsj.bean.Product;
-import com.jsj.bean.Record;
-import com.jsj.bean.User;
+import com.jsj.entity.Product;
+import com.jsj.entity.Record;
+import com.jsj.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,19 +10,21 @@ import java.util.List;
 @Repository
 public interface PanicBuyingMapper {
 
-    Product getProductById(Integer id);
+	Product getProductById(Integer id);
 
-    User getUserById(Integer id);
+	User getUserById(Integer id);
 
-    List<User> getAllUsers();
+	List<User> getAllUsers();
 
-    List<Product> getAllProducts();
+	List<Product> getAllProducts();
 
-    List<Record> getAllRecords();
+	List<Record> getAllRecords();
 
-    boolean addRecord(Record record);
+	boolean addRecord(Record record);
 
-    boolean decreaseProductStock(Integer productId);
+	boolean addUser(User user);
 
-    boolean addUser(User user);
+	boolean addProduct(Product product);
+
+	boolean decreaseProductStock(Integer productId);
 }

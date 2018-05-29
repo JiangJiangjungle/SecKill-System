@@ -1,6 +1,6 @@
 package com.jsj.web.common;
 
-import com.jsj.constant.ServiceRessult;
+import com.jsj.constant.ServiceResult;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,14 +12,14 @@ public class Message<T> {
 
     private T body;
 
-    public Message(ServiceRessult resultEnum, T body) {
+    public Message(ServiceResult resultEnum, T body) {
         this.head = new Head();
         this.head.setStatusCode(resultEnum.getValue());
         this.head.setStatusMessage(resultEnum.getLabel());
         this.body = body;
     }
 
-    public Message(ServiceRessult resultEnum) {
+    public Message(ServiceResult resultEnum) {
         this.head = new Head();
         this.head.setStatusCode(resultEnum.getValue());
         this.head.setStatusMessage(resultEnum.getLabel());

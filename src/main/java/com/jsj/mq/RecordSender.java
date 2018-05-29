@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -19,11 +20,12 @@ public class RecordSender implements RabbitTemplate.ConfirmCallback {
     @Autowired
     private RabbitmqConfig rabbitmqConfig;
 
+    @Scheduled(fixedRate = 2000)
     public void sendMsg(String message) {
         CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString());
 
-        this.rabbitTemplate.setConfirmCallback(this);//rabbitTemplate如果为单例的话，那回调就是最后设置的内容
-        this.rabbitTemplate.convertAndSend(rabbitmqConfig.getExchangeName(), rabbitmqConfig.getRoutingKey()
+        rabbitTemplate.setConfirmCallback(this);//rabbitTemplate如果为单例的话，那回调就是最后设置的内容
+        rabbitTemplate.convertAndSend(rabbitmqConfig.getExchangeName(), rabbitmqConfig.getRoutingKey()
                 , message, correlationId);
     }
 

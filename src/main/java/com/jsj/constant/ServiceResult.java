@@ -1,6 +1,6 @@
 package com.jsj.constant;
 
-public enum ServiceRessult {
+public enum ServiceResult {
 
     /**
      * 服务级错误
@@ -13,7 +13,7 @@ public enum ServiceRessult {
     private int value;
     private String label;
 
-    ServiceRessult(int value, String label) {
+    ServiceResult(int value, String label) {
         this.value = value;
         this.label = label;
     }

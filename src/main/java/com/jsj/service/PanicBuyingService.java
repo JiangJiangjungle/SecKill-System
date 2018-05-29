@@ -2,9 +2,9 @@ package com.jsj.service;
 
 import com.alibaba.fastjson.JSON;
 import com.jsj.atomicstock.ProductAtomicStock;
-import com.jsj.bean.Record;
 import com.jsj.cache.RedisCachePool;
-import com.jsj.constant.ServiceRessult;
+import com.jsj.constant.ServiceResult;
+import com.jsj.entity.Record;
 import com.jsj.mapper.PanicBuyingMapper;
 import com.jsj.mq.RecordSender;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class PanicBuyingService {
      * @return
      */
     @Transactional
-    public ServiceRessult handleByAtomicStock(Map<String, Object> paramMap) {
+    public ServiceResult handleByAtomicStock(Map<String, Object> paramMap) {
         //获得用户ID
         Integer userId = (Integer) paramMap.get("userId");
         //获得商品ID
@@ -50,23 +50,22 @@ public class PanicBuyingService {
         //获得redis连接
         Jedis jedis = redisCachePool.getJedis();
         //检查是否重复购买
-        if (jedis.sismember(productId + "_isBought", userId + "")) return ServiceRessult.REPEAT;
+        if (jedis.sismember(productId + "_isBought", userId + "")) return ServiceResult.REPEAT;
         //根据商品ID得到原子数量实例
         AtomicInteger stock = productAtomicStock.getStockById(productId);
         try {
             if (stock == null) {
                 log.info("不存在商品ID为： " + productId + " 的商品");
-                return ServiceRessult.FAIL;
+                return ServiceResult.FAIL;
             }
             int now = stock.get();
             if (now > 0 && stock.compareAndSet(now, now - 1)) {
-                Record record = new Record(userId, productId, ServiceRessult.SUCCESS.getValue(),
-                        ServiceRessult.SUCCESS.getLabel(), new Date());
+                Record record = new Record(userId, productId, ServiceResult.SUCCESS.getValue(), new Date());
                 recordSender.sendMsg(JSON.toJSONString(record));
                 jedis.sadd(productId + "_isBought", userId + "");
-                return ServiceRessult.SUCCESS;
+                return ServiceResult.SUCCESS;
             }
-            return ServiceRessult.FAIL;
+            return ServiceResult.FAIL;
         } finally {
             jedis.close();
         }
@@ -79,7 +78,7 @@ public class PanicBuyingService {
      * @return
      */
     @Transactional
-    public ServiceRessult handleByRedisStock(Map<String, Object> paramMap) {
+    public ServiceResult handleByRedisStock(Map<String, Object> paramMap) {
         //获得用户ID
         Integer userId = (Integer) paramMap.get("userId");
         //获得商品ID
@@ -87,7 +86,7 @@ public class PanicBuyingService {
         //获得redis连接
         Jedis jedis = redisCachePool.getJedis();
         //检查是否重复购买
-        if (jedis.sismember(productId + "_isBought", userId + "")) return ServiceRessult.REPEAT;
+        if (jedis.sismember(productId + "_isBought", userId + "")) return ServiceResult.REPEAT;
         String key = productId + "_stock";
         try {
             //开启监视
@@ -100,14 +99,13 @@ public class PanicBuyingService {
                 //提交事务
                 List<Object> result = tx.exec();
                 if (!result.isEmpty()) {
-                    Record record = new Record(userId, productId, ServiceRessult.SUCCESS.getValue(),
-                            ServiceRessult.SUCCESS.getLabel(), new Date());
+                    Record record = new Record(userId, productId, ServiceResult.SUCCESS.getValue(), new Date());
                     recordSender.sendMsg(JSON.toJSONString(record));
                     jedis.sadd(productId + "_isBought", userId + "");
-                    return ServiceRessult.SUCCESS;
+                    return ServiceResult.SUCCESS;
                 }
             }
-            return ServiceRessult.FAIL;
+            return ServiceResult.FAIL;
         } finally {
             jedis.close();
         }
@@ -120,7 +118,7 @@ public class PanicBuyingService {
      * @return
      */
     @Transactional
-    public ServiceRessult handleByMySQLLock(Map<String, Object> paramMap) {
+    public ServiceResult handleByMySQLLock(Map<String, Object> paramMap) {
         //获得用户ID
         Integer userId = (Integer) paramMap.get("userId");
         //获得商品ID
@@ -128,17 +126,16 @@ public class PanicBuyingService {
         //获得redis连接
         Jedis jedis = redisCachePool.getJedis();
         //检查是否重复购买
-        if (jedis.sismember(productId + "_isBought", userId + "")) return ServiceRessult.REPEAT;
+        if (jedis.sismember(productId + "_isBought", userId + "")) return ServiceResult.REPEAT;
         try {
             //执行减一操作
             if (panicBuyingMapper.decreaseProductStock(productId)) {
-                Record record = new Record(userId, productId, ServiceRessult.SUCCESS.getValue(),
-                        ServiceRessult.SUCCESS.getLabel(), new Date());
+                Record record = new Record(userId, productId, ServiceResult.SUCCESS.getValue(), new Date());
                 panicBuyingMapper.addRecord(record);
                 jedis.sadd(productId + "_isBought", userId + "");
-                return ServiceRessult.SUCCESS;
+                return ServiceResult.SUCCESS;
             }
-            return ServiceRessult.FAIL;
+            return ServiceResult.FAIL;
         } finally {
             jedis.close();
         }

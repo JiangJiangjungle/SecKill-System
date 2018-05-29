@@ -1,8 +1,8 @@
 package com.jsj.mq;
 
 import com.alibaba.fastjson.JSON;
-import com.jsj.bean.Record;
-import com.jsj.constant.ServiceRessult;
+import com.jsj.constant.ServiceResult;
+import com.jsj.entity.Record;
 import com.jsj.mapper.PanicBuyingMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,10 +25,15 @@ public class RabbitMqTest {
 
     @Test
     public void test() {
-        Record record = new Record(666, 999, ServiceRessult.SUCCESS.getValue(),
-                ServiceRessult.SUCCESS.getLabel(), new Date());
+        Record record = new Record(666, 999, ServiceResult.SUCCESS.getValue(), new Date());
         String message = JSON.toJSONString(record);
-        recordSender.sendMsg(message);
+        for (int i = 0; i < 10; i++) {
+            recordSender.sendMsg(i + "_msg");
+        }
+    }
+
+    @Test
+    public void test2() {
 
     }
 

@@ -1,6 +1,6 @@
 package com.jsj;
 
-import com.jsj.constant.ServiceRessult;
+import com.jsj.constant.ServiceResult;
 import com.jsj.service.PanicBuyingService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ public class ServiceTest {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId",1);
         paramMap.put("productId", 4);
-        ServiceRessult response = panicBuyingService.handleByMySQLLock(paramMap);
+        ServiceResult response = panicBuyingService.handleByMySQLLock(paramMap);
         System.out.println(response.toString());
     }
 }

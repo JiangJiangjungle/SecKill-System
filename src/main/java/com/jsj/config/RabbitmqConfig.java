@@ -5,6 +5,7 @@ import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -71,7 +72,7 @@ public class RabbitmqConfig {
      * DirectExchange:按照routingkey分发到指定队列
      * TopicExchange:多关键字匹配
      */
-    @Bean
+    @Bean(name = "directExchange")
     public DirectExchange defaultExchange() {
         return new DirectExchange(exchangeName);
     }
@@ -84,8 +85,8 @@ public class RabbitmqConfig {
 
     //绑定
     @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(this.queue()).to(this.defaultExchange()).with(this.routingKey);
+    public Binding binding(@Qualifier("queue") Queue queue, @Qualifier("directExchange") DirectExchange directExchange) {
+        return BindingBuilder.bind(queue).to(directExchange).with(this.routingKey);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.jsj.controller;
 
-import com.jsj.constant.ServiceRessult;
+import com.jsj.constant.ServiceResult;
 import com.jsj.service.PanicBuyingService;
 import com.jsj.web.common.Message;
 import com.jsj.web.req.PanicBuyingRequest;
@@ -32,7 +32,7 @@ public class PanicBuyingController {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", requestMessage.getBody().getUserId());
         paramMap.put("productId", requestMessage.getBody().getProductId());
-        ServiceRessult result = panicBuyingService.handleByMySQLLock(paramMap);
+        ServiceResult result = panicBuyingService.handleByMySQLLock(paramMap);
         return new Message<>(result, null);
     }
 
@@ -46,7 +46,7 @@ public class PanicBuyingController {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", requestMessage.getBody().getUserId());
         paramMap.put("productId", requestMessage.getBody().getProductId());
-        ServiceRessult result = panicBuyingService.handleByRedisStock(paramMap);
+        ServiceResult result = panicBuyingService.handleByRedisStock(paramMap);
         return new Message<>(result, null);
     }
 
@@ -61,7 +61,7 @@ public class PanicBuyingController {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", requestMessage.getBody().getUserId());
         paramMap.put("productId", requestMessage.getBody().getProductId());
-        ServiceRessult result = panicBuyingService.handleByAtomicStock(paramMap);
+        ServiceResult result = panicBuyingService.handleByAtomicStock(paramMap);
         return new Message<>(result, null);
     }
 }
