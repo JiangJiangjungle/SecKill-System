@@ -1,6 +1,5 @@
 package com.jsj.mq;
 
-import com.jsj.mapper.PanicBuyingMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class MqReceiver {
 //    @RabbitHandler
 //    public void process(String message) throws Exception {
 //
-////        Record record = JSON.parseObject(message, new TypeReference<Record>() {
+////        RecordPO record = JSON.parseObject(message, new TypeReference<RecordPO>() {
 ////        });
 ////        int productId = record.getProductId();
 ////        //插入record

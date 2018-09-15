@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 @RestController
 @SpringBootApplication
-@MapperScan("com.jsj.mapper")//将项目中对应的mapper类的路径加进来就可以了
+@MapperScan("com.jsj.dao")//将项目中对应的mapper类的路径加进来就可以了
 public class DemoApplication {
 
     @Resource

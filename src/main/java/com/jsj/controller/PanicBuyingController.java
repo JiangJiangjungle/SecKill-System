@@ -18,9 +18,6 @@ import java.util.Map;
 @RestController
 public class PanicBuyingController {
 
-    @Autowired
-    private PanicBuyingService panicBuyingService;
-
     /**
      * MySQL行锁
      *
@@ -29,11 +26,7 @@ public class PanicBuyingController {
      */
     @RequestMapping(value = "/pessLockInMySQL", method = RequestMethod.POST)
     public Message<PanicBuyingResponse> pessLockInMySQL(@RequestBody Message<PanicBuyingRequest> requestMessage) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("userId", requestMessage.getBody().getUserId());
-        paramMap.put("productId", requestMessage.getBody().getProductId());
-        ServiceResult result = panicBuyingService.handleByMySQLLock(paramMap);
-        return new Message<>(result, null);
+        return null;
     }
 
     /**
@@ -43,11 +36,7 @@ public class PanicBuyingController {
      */
     @RequestMapping(value = "/baseOnRedisWatch", method = RequestMethod.POST)
     public Message<PanicBuyingResponse> baseOnRedisWatch(@RequestBody Message<PanicBuyingRequest> requestMessage) throws InterruptedException {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("userId", requestMessage.getBody().getUserId());
-        paramMap.put("productId", requestMessage.getBody().getProductId());
-        ServiceResult result = panicBuyingService.handleByRedisStock(paramMap);
-        return new Message<>(result, null);
+        return null;
     }
 
     /**
@@ -58,10 +47,6 @@ public class PanicBuyingController {
      */
     @RequestMapping(value = "/baseOnAtomicInteger", method = RequestMethod.POST)
     public Message<PanicBuyingResponse> baseOnAtomicInteger(@RequestBody Message<PanicBuyingRequest> requestMessage) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("userId", requestMessage.getBody().getUserId());
-        paramMap.put("productId", requestMessage.getBody().getProductId());
-        ServiceResult result = panicBuyingService.handleByAtomicStock(paramMap);
-        return new Message<>(result, null);
+        return null;
     }
 }
