@@ -19,7 +19,7 @@ public class ProductPOTest {
     private ProductPoMapper productPoMapper;
 
     @Test
-    public void testAdd(){
+    public void testAdd()throws Exception{
         UUID id = UUID.randomUUID();
         BigDecimal price = new BigDecimal("5999.9");
         String name = "huawei";
@@ -33,20 +33,20 @@ public class ProductPOTest {
     }
 
     @Test
-    public void testUpdate(){
+    public void testUpdate()throws Exception{
         String id = "2bf55f51-6687-4587-8fd5-bb6c82fe8e7c";
         boolean finished = productPoMapper.updateProductStock(id);
     }
 
     @Test
-    public void testSearchByPrimaryId(){
+    public void testSearchByPrimaryId()throws Exception{
         String id = "2bf55f51-6687-4587-8fd5-bb6c82fe8e7c";
         ProductPO productPO = productPoMapper.getProductById(id);
         System.out.println(productPO.toString());
     }
 
     @Test
-    public void testSearch(){
+    public void testSearch()throws Exception{
         List<ProductPO> productPOList = productPoMapper.getAllProducts();
         productPOList.forEach(System.out::println);
     }

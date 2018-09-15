@@ -1,4 +1,4 @@
-package com.jsj.web.req;
+package com.jsj.vo.req;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PanicBuyingRequest {
+public class BuyInformation {
 
-    private Integer userId;
+    private String userId;
 
-    private Integer productId;
+    private String productId;
 }

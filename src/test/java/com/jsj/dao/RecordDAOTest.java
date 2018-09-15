@@ -18,7 +18,7 @@ public class RecordDAOTest {
     private RecordPoMapper recordPoMapper;
 
     @Test
-    public void testAdd(){
+    public void testAdd()throws Exception{
         UUID userId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
         RecordPO recordPO = new RecordPO(null, userId.toString(), productId.toString(), 1, new Date());
@@ -36,13 +36,13 @@ public class RecordDAOTest {
     }
 
     @Test
-    public void testSearchByPrimaryId(){
+    public void testSearchByPrimaryId()throws Exception{
         int id = 1;
         RecordPO recordPO = recordPoMapper.getRecordById(id);
     }
 
     @Test
-    public void testSearch(){
+    public void testSearch()throws Exception{
         List<RecordPO> recordPOList = recordPoMapper.getAllRecords();
         recordPOList.forEach(System.out::println);
     }

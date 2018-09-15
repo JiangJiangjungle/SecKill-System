@@ -2,7 +2,8 @@ package com.jsj.service.impl;
 
 import com.jsj.dao.UserPoMapper;
 import com.jsj.entity.UserPO;
-import com.jsj.exception.BaseException;
+import com.jsj.exception.DAOException;
+import com.jsj.exception.ServiceException;
 import com.jsj.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
@@ -24,26 +25,34 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserPoMapper userPoMapper;
 
-    @Transactional(rollbackFor = BaseException.class)
+    @Transactional(rollbackFor = ServiceException.class)
     @Override
-    public UserPO searchUserById(String id) throws BaseException{
-        if(StringUtils.isEmpty(id)){
-            throw new BaseException("id不能为空");
+    public UserPO searchUserById(String id) throws ServiceException {
+        if (StringUtils.isEmpty(id)) {
+            throw new ServiceException("id不能为空");
         }
-        return userPoMapper.getUserById(id);
+        try {
+            return userPoMapper.getUserById(id);
+        } catch (DAOException d) {
+            throw new ServiceException("由DAOException导致");
+        }
     }
 
-    @Transactional(rollbackFor = BaseException.class)
+    @Transactional(rollbackFor = ServiceException.class)
     @Override
-    public boolean addUser(String userName, String phone) throws BaseException {
+    public boolean addUser(String userName, String phone) throws ServiceException {
         if (StringUtils.isEmpty(userName)) {
-            throw new BaseException("name不能为空");
+            throw new ServiceException("name不能为空");
         }
         if (StringUtils.isEmpty(phone)) {
-            throw new BaseException("phone不能为空");
+            throw new ServiceException("phone不能为空");
         }
         String userId = UUID.randomUUID().toString();
-        UserPO userPO = new UserPO(userId,userName,phone,new Date());
-        return userPoMapper.addUser(userPO);
+        UserPO userPO = new UserPO(userId, userName, phone, new Date());
+        try {
+            return userPoMapper.addUser(userPO);
+        } catch (DAOException d) {
+            throw new ServiceException("由DAOException导致");
+        }
     }
 }

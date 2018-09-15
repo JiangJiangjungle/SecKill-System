@@ -1,6 +1,7 @@
 package com.jsj.dao;
 
 import com.jsj.entity.UserPO;
+import com.jsj.exception.DAOException;
 
 import java.util.List;
 import java.util.Map;
@@ -12,9 +13,9 @@ import java.util.Map;
  */
 public interface UserPoMapper {
 
-    boolean addUser(UserPO userPO);
+    boolean addUser(UserPO userPO) throws DAOException;
 
-    UserPO getUserById(String id);
+    UserPO getUserById(String id)throws DAOException;
 
-    List<UserPO> searchUsers(Map<String,Object> params);
+    List<UserPO> searchUsers(Map<String,Object> params)throws DAOException;
 }

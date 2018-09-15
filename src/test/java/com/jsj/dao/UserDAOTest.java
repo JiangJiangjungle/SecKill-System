@@ -16,7 +16,7 @@ public class UserDAOTest {
     private UserPoMapper userPoMapper;
 
     @Test
-    public void testAdd(){
+    public void testAdd()throws Exception{
         UUID id = UUID.randomUUID();
         String name = "jsj";
         String phoneNumber="17620756782";
@@ -40,7 +40,7 @@ public class UserDAOTest {
     }
 
     @Test
-    public void testSearch(){
+    public void testSearch()throws Exception{
         Map<String,Object> map = new HashMap<>(2);
         map.put("userName","jsj");
         map.put("phone","2075");

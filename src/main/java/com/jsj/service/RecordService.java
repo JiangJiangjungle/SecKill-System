@@ -1,31 +1,37 @@
 package com.jsj.service;
 
 import com.jsj.entity.RecordPO;
-import com.jsj.exception.BaseException;
+import com.jsj.exception.ServiceException;
 
+/**
+ * @author jiangshenjie
+ * @date 2018-9-15
+ */
 public interface RecordService {
 
     /**
      * 发送交易记录到消息队列
-     * @param recordPO
+     * @param userId
+     * @param productId
+     * @param state
      * @return
-     * @throws BaseException
+     * @throws ServiceException
      */
-    boolean sendRecordToMessageUtil(RecordPO recordPO) throws BaseException;
+    boolean sendRecordToMessageUtil(String userId, String productId, Integer state) throws ServiceException;
 
     /**
      * 直接新增交易记录
      *
      * @return
-     * @throws BaseException
+     * @throws ServiceException
      */
-    boolean addRecord(String userId,String productId,Integer state) throws BaseException;
+    boolean addRecord(String userId,String productId,Integer state) throws ServiceException;
 
     /**
      * 根据id查询交易记录
      * @param id
      * @return
-     * @throws BaseException
+     * @throws ServiceException
      */
-    RecordPO searchById(Integer id) throws BaseException;
+    RecordPO searchById(Integer id) throws ServiceException;
 }

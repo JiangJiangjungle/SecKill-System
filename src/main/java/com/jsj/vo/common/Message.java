@@ -1,4 +1,4 @@
-package com.jsj.web.common;
+package com.jsj.vo.common;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,16 +8,21 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class Head {
+public class Message<T> {
 
     /**
      * 状态码
      */
-    private int statusCode;
+    private Integer statusCode;
 
     /**
      * 状态信息
      */
     private String statusMessage;
+
+    /**
+     * 其他
+     */
+    private T body;
 
 }

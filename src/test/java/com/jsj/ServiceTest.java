@@ -1,7 +1,7 @@
 package com.jsj;
 
 import com.jsj.util.ServiceResult;
-import com.jsj.service.PanicBuyingService;
+import com.jsj.service.PanicBuyService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,14 +16,7 @@ import java.util.Map;
 public class ServiceTest {
 
     @Resource
-    private PanicBuyingService panicBuyingService;
+    private PanicBuyService panicBuyService;
 
-    @Test
-    public void test() throws Exception {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("userId",1);
-        paramMap.put("productId", 4);
-        ServiceResult response = panicBuyingService.handleByMySQLLock(paramMap);
-        System.out.println(response.toString());
-    }
+
 }
