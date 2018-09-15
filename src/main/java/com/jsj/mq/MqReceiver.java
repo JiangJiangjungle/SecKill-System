@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 @RabbitListener(queues = "recordStorageStoQueue")
 public class MqReceiver {
 
-    @Autowired
-    private PanicBuyingMapper panicBuyingMapper;
 
 
 //    @RabbitHandler

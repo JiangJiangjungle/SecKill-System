@@ -17,9 +17,6 @@ public class RabbitMqTest {
     @Resource
     RecordSender recordSender;
 
-    @Autowired
-    PanicBuyingMapper panicBuyingMapper;
-
     @Test
     public void test() {
         RecordPO recordPO = new RecordPO();
