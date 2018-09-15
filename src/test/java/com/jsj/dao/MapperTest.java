@@ -1,10 +1,8 @@
 package com.jsj.dao;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.jsj.entity.po.ProductPO;
-import com.jsj.entity.po.RecordPO;
-import com.jsj.entity.po.UserPO;
+import com.jsj.entity.ProductPO;
+import com.jsj.entity.RecordPO;
+import com.jsj.entity.UserPO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

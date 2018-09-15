@@ -1,6 +1,10 @@
 package com.jsj.service;
 
-import com.jsj.constant.ServiceResult;
+import com.jsj.exception.BaseException;
+import com.jsj.util.ServiceResult;
+import com.jsj.dao.ProductPoMapper;
+import com.jsj.dao.RecordPoMapper;
+import com.jsj.dao.UserPoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,34 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Map;
 
-@Slf4j
-@Service
-public class PanicBuyingService {
-
-    @Resource
-    private PanicBuyingMapper panicBuyingMapper;
-
-    /**
-     * 利用原子类作为计数器实现抢购
-     *
-     * @param paramMap
-     * @return
-     */
-    @Transactional
-    public ServiceResult handleByAtomicStock(Map<String, Object> paramMap) {
-        return null;
-    }
-
-    /**
-     * 利用redis事务支持实现抢购
-     *
-     * @param paramMap
-     * @return
-     */
-    @Transactional
-    public ServiceResult handleByRedisStock(Map<String, Object> paramMap) {
-        return null;
-    }
+public interface PanicBuyingService {
 
     /**
      * 利用MySQL行锁进行更新
@@ -43,8 +20,5 @@ public class PanicBuyingService {
      * @param paramMap
      * @return
      */
-    @Transactional
-    public ServiceResult handleByMySQLLock(Map<String, Object> paramMap) {
-        return null;
-    }
+    ServiceResult handleByMySQLLock(Map<String, Object> paramMap) throws BaseException;
 }

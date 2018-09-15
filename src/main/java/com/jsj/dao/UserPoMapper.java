@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.entity.po.UserPO;
+import com.jsj.entity.UserPO;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.jsj.entity.po;
+package com.jsj.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,4 +37,10 @@ public class RecordPO {
      */
     private Date createTime;
 
+    public RecordPO(String userId, String productId, Integer state, Date createTime) {
+        this.userId = userId;
+        this.productId = productId;
+        this.state = state;
+        this.createTime = createTime;
+    }
 }

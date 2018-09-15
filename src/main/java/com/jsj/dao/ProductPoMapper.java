@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.entity.po.ProductPO;
+import com.jsj.entity.ProductPO;
 
 import java.util.List;
 

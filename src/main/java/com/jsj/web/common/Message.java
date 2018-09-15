@@ -1,6 +1,6 @@
 package com.jsj.web.common;
 
-import com.jsj.constant.ServiceResult;
+import com.jsj.util.ServiceResult;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

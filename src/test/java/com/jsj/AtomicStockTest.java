@@ -1,6 +1,6 @@
 package com.jsj;
 
-import com.jsj.atomicstock.ProductAtomicStock;
+import com.jsj.util.ProductAtomicStock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

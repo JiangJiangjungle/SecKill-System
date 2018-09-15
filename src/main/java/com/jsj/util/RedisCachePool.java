@@ -1,4 +1,4 @@
-package com.jsj.cache;
+package com.jsj.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,6 @@ public class RedisCachePool {
     @Autowired
     private JedisPool jedisPool;
 
-    @Resource
-    private PanicBuyingMapper panicBuyingMapper;
 
     public Jedis getJedis() {
         return jedisPool.getResource();

@@ -1,13 +1,16 @@
-package com.jsj.constant;
+package com.jsj.util;
 
+/**
+ * 用于返回秒杀结果
+ */
 public enum ServiceResult {
-
-    /**
-     * 服务级错误
-     */
+    //秒杀成功
     SUCCESS(1, "秒杀成功"),
+    //秒杀失败
     FAIL(0, "秒杀失败"),
+    //重复秒杀
     REPEAT(-1, "重复秒杀"),
+    //系统错误
     SYSTEM_EXCEPTION(-2, "系统错误");
 
     private int value;

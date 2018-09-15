@@ -1,4 +1,4 @@
-package com.jsj.atomicstock;
+package com.jsj.util;
 
 import org.springframework.stereotype.Component;
 
@@ -11,9 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ProductAtomicStock {
 
     private Map<String, AtomicInteger> stockMap;
-
-    @Resource
-    private PanicBuyingMapper panicBuyingMapper;
 
     @PostConstruct
     private void init() {

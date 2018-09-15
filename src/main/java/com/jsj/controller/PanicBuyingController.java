@@ -1,18 +1,12 @@
 package com.jsj.controller;
 
-import com.jsj.constant.ServiceResult;
-import com.jsj.service.PanicBuyingService;
 import com.jsj.web.common.Message;
 import com.jsj.web.req.PanicBuyingRequest;
 import com.jsj.web.vo.PanicBuyingResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RequestMapping("/product")
 @RestController

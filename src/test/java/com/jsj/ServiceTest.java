@@ -1,6 +1,6 @@
 package com.jsj;
 
-import com.jsj.constant.ServiceResult;
+import com.jsj.util.ServiceResult;
 import com.jsj.service.PanicBuyingService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

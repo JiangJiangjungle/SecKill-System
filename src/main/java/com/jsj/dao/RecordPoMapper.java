@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.entity.po.RecordPO;
+import com.jsj.entity.RecordPO;
 
 import java.util.List;
 

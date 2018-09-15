@@ -1,14 +1,12 @@
 package com.jsj.dao;
 
-import com.jsj.entity.po.ProductPO;
-import com.jsj.entity.po.UserPO;
+import com.jsj.entity.UserPO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.*;
 
 @RunWith(SpringRunner.class)
