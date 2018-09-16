@@ -7,6 +7,7 @@ import com.jsj.vo.common.Message;
 import com.jsj.vo.req.BuyInformation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

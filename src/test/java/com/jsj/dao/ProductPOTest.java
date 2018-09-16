@@ -35,7 +35,10 @@ public class ProductPOTest {
     @Test
     public void testUpdate()throws Exception{
         String id = "2bf55f51-6687-4587-8fd5-bb6c82fe8e7c";
-        boolean finished = productPoMapper.updateProductStock(id);
+        ProductPO productPO = productPoMapper.getProductById(id);
+        if (productPO.getStock()>0){
+            boolean finished = productPoMapper.updateProductStock(id,productPO.getVersionId());
+        }
     }
 
     @Test

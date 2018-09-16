@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
@@ -30,11 +31,13 @@ public class PanicBuyServiceImpl implements PanicBuyService {
     @Resource
     private JedisUtils jedisUtils;
 
+    @Transactional(rollbackFor = ServiceException.class)
     @Override
     public ServiceResult handleByOptimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
         return null;
     }
 
+    @Transactional(rollbackFor = ServiceException.class)
     @Override
     public ServiceResult handleByPessimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
         if (StringUtils.isEmpty(userId)) {
@@ -52,7 +55,12 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 //返回重复秒杀信息
                 return ServiceResult.REPEAT;
             }
-            if (productPoMapper.updateProductStock(productId)) {
+            ProductPO productPO = productPoMapper.getProductById(productId);
+            boolean finished = false;
+            if (productPO.getStock()>0){
+                finished = productPoMapper.updateProductStock(productId,productPO.getVersionId());
+            }
+            if (finished) {
                 //添加到成功抢购名单
                 jedis.sadd(productId, userId);
                 //todo 发送交易记录到消息队列

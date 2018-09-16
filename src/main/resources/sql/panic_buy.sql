@@ -10,14 +10,15 @@ CREATE TABLE tb_user(
 ) ENGINE=INNODB default charset='utf8';
 
 DROP TABLE IF EXISTS tb_product;
-CREATE TABLE tb_product(
-    id VARCHAR(64) not null comment "ID",
-    product_name VARCHAR (50) not null comment "产品名称",
-    price DECIMAL(16,3) not null comment "价格",
-    stock INT(64) not null comment "库存",
-    create_time datetime not null default now() comment "创建时间",
-    primary key (id)
-)ENGINE=INNODB default charset='utf8';
+CREATE TABLE `tb_product` (
+  `id` varchar(64) NOT NULL COMMENT 'ID',
+  `product_name` varchar(50) NOT NULL COMMENT '产品名称',
+  `price` decimal(16,3) NOT NULL COMMENT '价格',
+  `stock` int(64) NOT NULL COMMENT '库存',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `version_id` int(128) DEFAULT '0' COMMENT '版本id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS tb_record;
 CREATE TABLE tb_record(

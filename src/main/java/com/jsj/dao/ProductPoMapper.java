@@ -2,6 +2,7 @@ package com.jsj.dao;
 
 import com.jsj.entity.ProductPO;
 import com.jsj.exception.DAOException;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,11 +21,11 @@ public interface ProductPoMapper {
     boolean addProduct(ProductPO productPO)throws DAOException;
 
     /**
-     * 商品库存减1
+     * 利用乐观锁更新商品库存
      * @param id
      * @return
      */
-    boolean updateProductStock(String id)throws DAOException;
+    boolean updateProductStock(@Param("id")String id,@Param("versionId") Integer versionId)throws DAOException;
 
     /**
      * 根据主键查找

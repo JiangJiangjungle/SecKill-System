@@ -39,5 +39,16 @@ public class ProductPO {
 	 * 创建时间
 	 */
 	private Date createTime;
+	/**
+	 * 版本号
+	 */
+	private Integer versionId;
 
+	public ProductPO(String id, Integer stock, BigDecimal price, String productName, Date createTime) {
+		this.id = id;
+		this.stock = stock;
+		this.price = price;
+		this.productName = productName;
+		this.createTime = createTime;
+	}
 }

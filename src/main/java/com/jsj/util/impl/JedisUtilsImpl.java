@@ -28,22 +28,22 @@ public class JedisUtilsImpl implements JedisUtils {
      */
     @PostConstruct
     public void loadData() throws Exception {
-//        int MAX = 1000;
-//        int count = 0;
-//        List<RecordPO> recordPOList;
-//        try {
-//            do {
-//                recordPOList = recordPoMapper.getAllRecords(count, count + MAX);
-//                if (recordPOList == null) {
-//                    break;
-//                }
-//                Jedis jedis = getJedis();
-//                recordPOList.forEach((RecordPO recordPO) -> jedis.sadd(recordPO.getProductId(), recordPO.getUserId()));
-//                count += MAX;
-//            } while (recordPOList.size() == MAX);
-//        } catch (DAOException d) {
-//            throw new DAOException("加载交易记录数据时失败");
-//        }
+        int MAX = 1000;
+        int count = 0;
+        List<RecordPO> recordPOList;
+        try {
+            do {
+                recordPOList = recordPoMapper.getAllRecords(count, count + MAX);
+                if (recordPOList == null) {
+                    break;
+                }
+                Jedis jedis = getJedis();
+                recordPOList.forEach((RecordPO recordPO) -> jedis.sadd(recordPO.getProductId(), recordPO.getUserId()));
+                count += MAX;
+            } while (recordPOList.size() == MAX);
+        } catch (DAOException d) {
+            throw new DAOException("加载交易记录数据时失败");
+        }
     }
 
     @Override
