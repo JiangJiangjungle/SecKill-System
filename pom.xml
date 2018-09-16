@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>springbootdemo</name>
+    <name>panic-buy</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
@@ -44,17 +44,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
-        <!--缓存支持-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <!--redis缓存支持-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-redis</artifactId>
-            <version>1.4.1.RELEASE</version>
-        </dependency>
         <!--mybatis支持-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -74,10 +63,11 @@
             <version>5.1.39</version>
         </dependency>
 
+        <!--redis缓存支持-->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
+            <version>1.4.1.RELEASE</version>
         </dependency>
 
         <!--以下是工具包-->
@@ -99,11 +89,11 @@
             <artifactId>lombok</artifactId>
             <version>1.16.6</version>
         </dependency>
-        <!--测试-->
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
         </dependency>
 
 

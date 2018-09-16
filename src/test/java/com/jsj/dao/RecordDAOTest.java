@@ -43,7 +43,7 @@ public class RecordDAOTest {
 
     @Test
     public void testSearch()throws Exception{
-        List<RecordPO> recordPOList = recordPoMapper.getAllRecords();
+        List<RecordPO> recordPOList = recordPoMapper.getAllRecords(0,1000);
         recordPOList.forEach(System.out::println);
     }
 }

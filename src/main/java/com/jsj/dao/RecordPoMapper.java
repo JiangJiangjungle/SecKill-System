@@ -2,6 +2,7 @@ package com.jsj.dao;
 
 import com.jsj.entity.RecordPO;
 import com.jsj.exception.DAOException;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ public interface RecordPoMapper {
 
     RecordPO getRecordById(Integer id)throws DAOException;
 
-    List<RecordPO> getAllRecords()throws DAOException;
+    List<RecordPO> getAllRecords(@Param("start")int start, @Param("end")int end)throws DAOException;
 }

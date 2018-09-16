@@ -21,7 +21,8 @@
     </select>
 
     <select id="getAllRecords" resultMap="myRecord">
-        select * from tb_record
+        select user_id,product_id from tb_record
+        limit #{start},#{end}
     </select>
 
     <insert id="addRecord" useGeneratedKeys="true" keyProperty="id">

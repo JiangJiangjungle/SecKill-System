@@ -1,25 +1,20 @@
 package com.jsj.service.impl;
 
 import com.jsj.entity.ProductPO;
-import com.jsj.entity.UserPO;
 import com.jsj.exception.DAOException;
 import com.jsj.exception.ServiceException;
 import com.jsj.service.PanicBuyService;
 import com.jsj.service.RecordService;
-import com.jsj.service.UserService;
-import com.jsj.util.JedisUtil;
+import com.jsj.util.JedisUtils;
 import com.jsj.util.ServiceResult;
 import com.jsj.dao.ProductPoMapper;
-import com.jsj.dao.RecordPoMapper;
-import com.jsj.dao.UserPoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -31,6 +26,9 @@ public class PanicBuyServiceImpl implements PanicBuyService {
 
     @Resource
     private ProductPoMapper productPoMapper;
+
+    @Resource
+    private JedisUtils jedisUtils;
 
     @Override
     public ServiceResult handleByOptimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
@@ -45,23 +43,27 @@ public class PanicBuyServiceImpl implements PanicBuyService {
         if (StringUtils.isEmpty(productId)) {
             throw new ServiceException("productId不能为空");
         }
+        Jedis jedis = null;
         try {
             //检查成功抢购名单中是否包含该用户
-            boolean hasUser = JedisUtil.hasUser(userId);
+            jedis = jedisUtils.getJedis();
+            boolean hasUser = jedis.sismember(productId, userId);
             if (hasUser) {
                 //返回重复秒杀信息
                 return ServiceResult.REPEAT;
             }
             if (productPoMapper.updateProductStock(productId)) {
                 //添加到成功抢购名单
-                JedisUtil.addUserToList(userId);
+                jedis.sadd(productId, userId);
                 //todo 发送交易记录到消息队列
-                recordService.sendRecordToMessageUtil(userId,productId,ServiceResult.SUCCESS.getValue());
+                recordService.sendRecordToMessageUtil(userId, productId, ServiceResult.SUCCESS.getValue());
                 return ServiceResult.SUCCESS;
             }
             return ServiceResult.FAIL;
         } catch (DAOException d) {
             throw new ServiceException("DAOException导致");
+        } finally {
+            jedisUtils.release(jedis);
         }
     }
 
