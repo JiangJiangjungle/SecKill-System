@@ -20,11 +20,17 @@
     </resultMap>
 
     <select id="getProductById" resultMap="myProduct">
-        select * from tb_product WHERE id=#{productId}
+        select id,stock,price,product_name,version_id,create_time from tb_product WHERE id=#{productId}
     </select>
 
     <select id="getAllProducts" resultMap="myProduct">
-        select * from tb_product
+        select id,stock,price,product_name,version_id,create_time from tb_product
+        limit #{start},#{end}
+    </select>
+
+    <select id="getAllStock" resultMap="myProduct">
+        select id,stock from tb_product
+        limit #{start},#{end}
     </select>
 
     <insert id="addProduct" useGeneratedKeys="true" keyProperty="id">

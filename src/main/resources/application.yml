@@ -16,7 +16,7 @@ spring:
   redis:
     database: 0
     host: 119.23.204.78
-    port: 6385
+    port: 6379
     jedis:
       pool:
         #连接池最大连接数
@@ -31,3 +31,8 @@ spring:
 mybatis:
   mapper-locations: classpath:dao/*.xml
   type-aliases-package: com.jsj.entity
+
+#自定义配置
+data:
+  #redis库存hash表的key
+  table-key: product_stocks

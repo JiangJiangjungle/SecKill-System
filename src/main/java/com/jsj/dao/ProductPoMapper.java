@@ -5,6 +5,7 @@ import com.jsj.exception.DAOException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -38,5 +39,11 @@ public interface ProductPoMapper {
      * 获取所有商品
      * @return
      */
-    List<ProductPO> getAllProducts()throws DAOException;
+    List<ProductPO> getAllProducts(@Param("start")int start, @Param("end")int end)throws DAOException;
+
+    /**
+     * 获取所有商品库存
+     * @return
+     */
+    List<ProductPO> getAllStock(@Param("start")int start, @Param("end")int end)throws DAOException;
 }

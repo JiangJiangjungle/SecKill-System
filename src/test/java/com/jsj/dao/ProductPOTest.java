@@ -50,7 +50,7 @@ public class ProductPOTest {
 
     @Test
     public void testSearch()throws Exception{
-        List<ProductPO> productPOList = productPoMapper.getAllProducts();
+        List<ProductPO> productPOList = productPoMapper.getAllProducts(0,1000);
         productPOList.forEach(System.out::println);
     }
 }
