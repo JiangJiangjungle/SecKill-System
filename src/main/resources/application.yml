@@ -58,4 +58,4 @@ mybatis:
 #自定义配置
 data:
   #redis库存hash表的key
-  table-key: product_stocks
+  hash-key: product_stocks

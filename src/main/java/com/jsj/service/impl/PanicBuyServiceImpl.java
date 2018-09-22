@@ -6,7 +6,7 @@ import com.jsj.exception.ServiceException;
 import com.jsj.service.PanicBuyService;
 import com.jsj.service.RecordService;
 import com.jsj.util.JedisUtils;
-import com.jsj.pojo.ServiceResult;
+import com.jsj.constant.BuyResultEnum;
 import com.jsj.dao.ProductPoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -31,13 +31,12 @@ public class PanicBuyServiceImpl implements PanicBuyService {
 
     @Resource
     private JedisUtils jedisUtils;
-
-    @Value("${data.table-key}")
-    private String TABLE_KEY;
+    @Value("${data.hash-key}")
+    private String hashKey;
 
     @Transactional(rollbackFor = ServiceException.class)
     @Override
-    public ServiceResult handleByOptimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
+    public BuyResultEnum handleByOptimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
         if (StringUtils.isEmpty(userId)) {
             throw new ServiceException("userId不能为空");
         }
@@ -52,10 +51,10 @@ public class PanicBuyServiceImpl implements PanicBuyService {
             boolean hasUser = jedis.sismember(productId, userId);
             if (hasUser) {
                 //返回重复秒杀信息
-                return ServiceResult.REPEAT;
+                return BuyResultEnum.REPEAT;
             }
             //查询数据库中的库存数量
-            Integer stock = Integer.parseInt(jedis.hget(TABLE_KEY, productId));
+            Integer stock = Integer.parseInt(jedis.hget(hashKey, productId));
             boolean finished = false;
             if (stock > 0) {
                 //乐观锁更新数据库中的库存数量
@@ -64,14 +63,14 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 //若更新成功，则更新缓存并异步发送消息
                 if (finished) {
                     //更新缓存中的库存数量
-                    jedis.hset(TABLE_KEY, productId, String.valueOf(stock - 1));
+                    jedis.hset(hashKey, productId, String.valueOf(stock - 1));
                     //添加到成功抢购名单
                     jedis.sadd(productId, userId);
                     //发送交易记录到消息队列
-                    recordService.sendRecordToMessageQueue(userId, productId, ServiceResult.SUCCESS.getValue());
+                    recordService.sendRecordToMessageQueue(userId, productId, BuyResultEnum.SUCCESS.getValue());
                 }
             }
-            return finished ? ServiceResult.SUCCESS : ServiceResult.FAIL;
+            return finished ? BuyResultEnum.SUCCESS : BuyResultEnum.FAIL;
         } catch (DAOException d) {
             throw new ServiceException("DAOException导致");
         } finally {
@@ -81,7 +80,7 @@ public class PanicBuyServiceImpl implements PanicBuyService {
 
     @Transactional(rollbackFor = ServiceException.class)
     @Override
-    public ServiceResult handleByPessimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
+    public BuyResultEnum handleByPessimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
         return null;
     }
 

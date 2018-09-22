@@ -1,8 +1,5 @@
 package com.jsj.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
-
 /**
  * kafka消息队列工具类
  */

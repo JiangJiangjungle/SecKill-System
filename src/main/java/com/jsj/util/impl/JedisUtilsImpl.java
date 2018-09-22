@@ -1,5 +1,6 @@
 package com.jsj.util.impl;
 
+import com.jsj.config.RedisConfig;
 import com.jsj.dao.ProductPoMapper;
 import com.jsj.dao.RecordPoMapper;
 import com.jsj.pojo.entity.ProductPO;
@@ -25,14 +26,13 @@ import java.util.Map;
 public class JedisUtilsImpl implements JedisUtils {
     @Resource
     private JedisPool jedisPool;
-
+    @Resource
+    private RedisConfig redisConfig;
     @Resource
     private RecordPoMapper recordPoMapper;
     @Resource
     private ProductPoMapper productPoMapper;
 
-    @Value("${data.table-key}")
-    private String TABLE_KEY;
 
     /**
      * 初始化数据
@@ -44,37 +44,34 @@ public class JedisUtilsImpl implements JedisUtils {
         //刷新缓存
         jedis.flushDB();
         log.info("刷新缓存");
+        String hashKey = redisConfig.getHashKey();
         List<RecordPO> recordPOList;
         List<ProductPO> productPOList;
-        /**
-         * 分页查询限制
-         */
-        int LIMIT_MAX = 1000;
         try {
             //加载交易记录
             do {
-                recordPOList = recordPoMapper.getAllRecords(count, count + LIMIT_MAX);
+                recordPOList = recordPoMapper.getAllRecords(count, count + redisConfig.LIMIT_MAX);
                 if (recordPOList == null || recordPOList.isEmpty()) {
                     break;
                 }
                 recordPOList.forEach((RecordPO recordPO) -> jedis.sadd(recordPO.getProductId(), recordPO.getUserId()));
                 log.info("加载交易记录第" + count + "-" + (count + recordPOList.size()) + "项到redis缓存");
-                count += LIMIT_MAX;
-            } while (recordPOList.size() == LIMIT_MAX);
+                count += redisConfig.LIMIT_MAX;
+            } while (recordPOList.size() == redisConfig.LIMIT_MAX);
 
             //加载库存记录
             count = 0;
             do {
-                productPOList = productPoMapper.getAllStock(count, count + LIMIT_MAX);
+                productPOList = productPoMapper.getAllStock(count, count + redisConfig.LIMIT_MAX);
                 if (productPOList == null || productPOList.isEmpty()) {
                     break;
                 }
                 Map<String, String> stocksMap = new HashMap<>(productPOList.size());
                 productPOList.forEach((ProductPO product) -> stocksMap.put(product.getId(), String.valueOf(product.getStock())));
-                jedis.hmset(TABLE_KEY, stocksMap);
+                jedis.hmset(hashKey, stocksMap);
                 log.info("加载库存记录第" + count + "-" + (count + stocksMap.size()) + "项到redis缓存");
-                count += LIMIT_MAX;
-            } while (productPOList.size() == LIMIT_MAX);
+                count += redisConfig.LIMIT_MAX;
+            } while (productPOList.size() == redisConfig.LIMIT_MAX);
         } catch (DAOException d) {
             throw new DAOException("加载交易和库存记录数据时失败");
         } finally {

@@ -1,7 +1,6 @@
 package com.jsj.service.impl;
 
 import com.jsj.dao.RecordPoMapper;
-import com.jsj.pojo.ServiceResult;
 import com.jsj.pojo.entity.RecordPO;
 import com.jsj.exception.DAOException;
 import com.jsj.exception.ServiceException;

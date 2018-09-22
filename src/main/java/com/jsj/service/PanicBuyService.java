@@ -1,7 +1,7 @@
 package com.jsj.service;
 
 import com.jsj.exception.ServiceException;
-import com.jsj.pojo.ServiceResult;
+import com.jsj.constant.BuyResultEnum;
 
 public interface PanicBuyService {
 
@@ -13,7 +13,7 @@ public interface PanicBuyService {
      * @return
      * @throws ServiceException
      */
-    ServiceResult handleByOptimisticLock(String userId,String productId,int buyNumber) throws ServiceException;
+    BuyResultEnum handleByOptimisticLock(String userId, String productId, int buyNumber) throws ServiceException;
 
 
     /**
@@ -24,7 +24,7 @@ public interface PanicBuyService {
      * @return
      * @throws ServiceException
      */
-    ServiceResult handleByPessimisticLock(String userId,String productId,int buyNumber) throws ServiceException;
+    BuyResultEnum handleByPessimisticLock(String userId, String productId, int buyNumber) throws ServiceException;
 
     /**
      * 查询商品库存
