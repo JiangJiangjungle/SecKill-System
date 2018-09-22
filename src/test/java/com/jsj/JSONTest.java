@@ -2,7 +2,7 @@ package com.jsj;
 
 
 import com.alibaba.fastjson.JSON;
-import com.jsj.pojo.vo.req.BuyInformation;
+import com.jsj.pojo.vo.BuyInformation;
 
 public class JSONTest {
 

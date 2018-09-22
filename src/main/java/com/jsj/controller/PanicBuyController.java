@@ -3,8 +3,8 @@ package com.jsj.controller;
 import com.jsj.exception.ServiceException;
 import com.jsj.service.PanicBuyService;
 import com.jsj.constant.BuyResultEnum;
-import com.jsj.pojo.vo.common.Message;
-import com.jsj.pojo.vo.req.BuyInformation;
+import com.jsj.pojo.vo.Message;
+import com.jsj.pojo.vo.BuyInformation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class PanicBuyController {
     /**
      * MySQL乐观锁实现抢购
      *
-     * @param buyInformation
+     * @param buyInformation 抢购请求信息
      * @return
      */
     @PostMapping("/ByOptimisticLock")
@@ -65,5 +65,38 @@ public class PanicBuyController {
         }
         // 返回结果
         return message;
+    }
+
+    /**
+     * todo 利用Mysql悲观锁实现抢购
+     *
+     * @param buyInformation 抢购请求信息
+     * @return
+     */
+    @PostMapping("/ByPessimisticLock")
+    public Message<?> handleByPessimisticLock(@RequestBody BuyInformation buyInformation) {
+        return null;
+    }
+
+    /**
+     * todo 利用redis分布式锁实现抢购
+     *
+     * @param buyInformation 抢购请求信息
+     * @return
+     */
+    @PostMapping("/ByRedisLock")
+    public Message<?> handleByRedisLock(@RequestBody BuyInformation buyInformation) {
+        return null;
+    }
+
+    /**
+     * todo 利用zookeeper分布式锁实现抢购
+     *
+     * @param buyInformation 抢购请求信息
+     * @return
+     */
+    @PostMapping("/ByZookeeperLock")
+    public Message<?> handleByZookeeperLock(@RequestBody BuyInformation buyInformation) {
+        return null;
     }
 }

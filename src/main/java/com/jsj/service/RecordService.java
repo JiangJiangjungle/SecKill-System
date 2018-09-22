@@ -1,6 +1,6 @@
 package com.jsj.service;
 
-import com.jsj.pojo.entity.RecordPO;
+import com.jsj.pojo.entity.RecordDO;
 import com.jsj.exception.ServiceException;
 
 /**
@@ -33,5 +33,5 @@ public interface RecordService {
      * @return
      * @throws ServiceException
      */
-    RecordPO searchById(Integer id) throws ServiceException;
+    RecordDO searchById(Integer id) throws ServiceException;
 }
