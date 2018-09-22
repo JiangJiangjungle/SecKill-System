@@ -5,7 +5,7 @@
 
 <mapper namespace="com.jsj.dao.ProductMapper">
 
-    <resultMap id="myProduct" type="productDO">
+    <resultMap id="myProduct" type="com.jsj.pojo.entity.ProductDO">
         <!--
         column:表里面指定的列
         property：对应的javaBean属性
@@ -23,7 +23,7 @@
         select id,stock,price,product_name,version_id,create_time from tb_product WHERE id=#{productId}
     </select>
 
-    <select id="getVersionId" resultType="Integer">
+    <select id="getVersionId" resultType="java.lang.Integer">
         select version_id from tb_product WHERE id=#{productId}
     </select>
 
@@ -42,7 +42,12 @@
         values(#{id},#{productName}, #{price}, #{stock})
     </insert>
 
-    <insert id="updateProductStock">
+    <insert id="updateStock">
+        UPDATE tb_product SET stock = stock-1
+        WHERE id=#{id} and stock>0
+    </insert>
+
+    <insert id="updateStockByLock">
         UPDATE tb_product SET stock = stock-1,version_id=#{versionId}+1
         WHERE id=#{id} AND version_id=#{versionId} and stock>0
     </insert>

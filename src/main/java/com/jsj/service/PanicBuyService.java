@@ -28,7 +28,7 @@ public interface PanicBuyService {
     BuyResultEnum handleByPessimisticLock(String userId, String productId, int buyNumber) throws ServiceException;
 
     /**
-     * todo 利用redis分布式锁实现抢购
+     * 利用redis分布式锁实现抢购
      *
      * @param userId
      * @param productId

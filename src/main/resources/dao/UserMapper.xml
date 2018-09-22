@@ -5,7 +5,7 @@
 
 <mapper namespace="com.jsj.dao.UserMapper">
 
-    <resultMap id="myUser" type="userDO">
+    <resultMap id="myUser" type="com.jsj.pojo.entity.UserDO">
         <id column="id" property="id"/>
         <result column="user_name" property="userName"/>
         <result column="phone" property="phone"/>
@@ -16,7 +16,7 @@
         select * from tb_user WHERE id=#{id}
     </select>
 
-    <select id="searchUsers" resultMap="myUser" parameterType="Map">
+    <select id="searchUsers" resultMap="myUser" parameterType="java.util.Map">
         select * from tb_user
         <where>
             <if test="userName != null and !&quot;&quot;.equals(userName.trim())">

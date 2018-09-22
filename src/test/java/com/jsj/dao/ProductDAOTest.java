@@ -37,7 +37,7 @@ public class ProductDAOTest {
         String id = "2bf55f51-6687-4587-8fd5-bb6c82fe8e7c";
         ProductDO productDO = productMapper.getProductById(id);
         if (productDO.getStock()>0){
-            boolean finished = productMapper.updateProductStock(id, productDO.getVersionId());
+            boolean finished = productMapper.updateStockByLock(id, productDO.getVersionId());
         }
     }
 

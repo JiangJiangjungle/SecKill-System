@@ -5,7 +5,7 @@
 
 <mapper namespace="com.jsj.dao.RecordMapper">
 
-    <resultMap id="myRecord" type="recordDO">
+    <resultMap id="myRecord" type="com.jsj.pojo.entity.RecordDO">
         <id column="id" property="id"/>
         <result column="product_id" property="productId"/>
         <result column="user_id" property="userId"/>

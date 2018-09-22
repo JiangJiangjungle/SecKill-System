@@ -59,3 +59,5 @@ mybatis:
 data:
   #redis库存hash表的key
   hash-key: product_stocks
+  #redis分布式锁的key
+  redis-lock-key: panic_buy_lock
