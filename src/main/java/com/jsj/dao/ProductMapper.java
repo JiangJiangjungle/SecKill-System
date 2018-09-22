@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.pojo.entity.ProductPO;
+import com.jsj.pojo.entity.ProductDO;
 import com.jsj.exception.DAOException;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,14 +11,14 @@ import java.util.List;
  * @author jiangshenjie
  * @date 2018-9-13
  */
-public interface ProductPoMapper {
+public interface ProductMapper {
 
     /**
      * 添加商品
-     * @param productPO
+     * @param productDO
      * @return
      */
-    boolean addProduct(ProductPO productPO)throws DAOException;
+    boolean addProduct(ProductDO productDO)throws DAOException;
 
     /**
      * 利用乐观锁更新商品库存
@@ -32,7 +32,7 @@ public interface ProductPoMapper {
      * @param id
      * @return
      */
-    ProductPO getProductById(String id)throws DAOException;
+    ProductDO getProductById(String id)throws DAOException;
 
     /**
      * 根据主键获取版本id
@@ -46,11 +46,11 @@ public interface ProductPoMapper {
      * 获取所有商品
      * @return
      */
-    List<ProductPO> getAllProducts(@Param("start")int start, @Param("end")int end)throws DAOException;
+    List<ProductDO> getAllProducts(@Param("start")int start, @Param("end")int end)throws DAOException;
 
     /**
      * 获取所有商品库存
      * @return
      */
-    List<ProductPO> getAllStock(@Param("start")int start, @Param("end")int end)throws DAOException;
+    List<ProductDO> getAllStock(@Param("start")int start, @Param("end")int end)throws DAOException;
 }

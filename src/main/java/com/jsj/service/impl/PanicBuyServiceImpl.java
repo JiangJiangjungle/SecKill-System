@@ -1,13 +1,13 @@
 package com.jsj.service.impl;
 
-import com.jsj.pojo.entity.ProductPO;
+import com.jsj.pojo.entity.ProductDO;
 import com.jsj.exception.DAOException;
 import com.jsj.exception.ServiceException;
 import com.jsj.service.PanicBuyService;
 import com.jsj.service.RecordService;
 import com.jsj.util.JedisUtils;
 import com.jsj.constant.BuyResultEnum;
-import com.jsj.dao.ProductPoMapper;
+import com.jsj.dao.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
@@ -18,6 +18,12 @@ import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
 
+/**
+ * 秒杀抢购service
+ *
+ * @author jsj
+ * @date 2018-9-22
+ */
 @Slf4j
 @Service
 @Alias("panicBuyService")
@@ -27,7 +33,7 @@ public class PanicBuyServiceImpl implements PanicBuyService {
     private RecordService recordService;
 
     @Resource
-    private ProductPoMapper productPoMapper;
+    private ProductMapper productMapper;
 
     @Resource
     private JedisUtils jedisUtils;
@@ -54,13 +60,14 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 return BuyResultEnum.REPEAT;
             }
             //查询数据库中的库存数量
-            Integer stock = Integer.parseInt(jedis.hget(hashKey, productId));
+            String stockString = jedis.hget(hashKey, productId);
+            int stock = StringUtils.isEmpty(stockString) ? 0 : Integer.parseInt(stockString);
             boolean finished = false;
             if (stock > 0) {
                 //乐观锁更新数据库中的库存数量
-                Integer versionId = productPoMapper.getVersionId(productId);
-                finished = productPoMapper.updateProductStock(productId, versionId);
-                //若更新成功，则更新缓存并异步发送消息
+                Integer versionId = productMapper.getVersionId(productId);
+                finished = productMapper.updateProductStock(productId, versionId);
+                //若更新成功，则同时更新缓存并异步发送消息
                 if (finished) {
                     //更新缓存中的库存数量
                     jedis.hset(hashKey, productId, String.valueOf(stock - 1));
@@ -84,14 +91,27 @@ public class PanicBuyServiceImpl implements PanicBuyService {
         return null;
     }
 
+    @Transactional(rollbackFor = ServiceException.class)
+    @Override
+    public BuyResultEnum handleByRedisLock(String userId, String productId, int buyNumber) throws ServiceException {
+        return null;
+    }
+
+    @Transactional(rollbackFor = ServiceException.class)
+    @Override
+    public BuyResultEnum handleByZookeeperLock(String userId, String productId, int buyNumber) throws ServiceException {
+        return null;
+    }
+
+
     @Override
     public int searchStock(String productId) throws ServiceException {
         if (StringUtils.isEmpty(productId)) {
             throw new ServiceException("id不能为空");
         }
         try {
-            ProductPO productPO = productPoMapper.getProductById(productId);
-            return productPO.getStock();
+            ProductDO productDO = productMapper.getProductById(productId);
+            return productDO.getStock();
         } catch (DAOException d) {
             log.info("获取商品信息失败,商品id:" + productId);
             throw new ServiceException("获取商品信息失败");

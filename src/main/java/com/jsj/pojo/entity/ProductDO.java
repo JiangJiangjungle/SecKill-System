@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductPO {
+public class ProductDO {
 	/**
 	 * 商品id（主键）
 	 */
@@ -42,7 +42,7 @@ public class ProductPO {
 	 */
 	private Integer versionId;
 
-	public ProductPO(String id, Integer stock, BigDecimal price, String productName, Date createTime) {
+	public ProductDO(String id, Integer stock, BigDecimal price, String productName, Date createTime) {
 		this.id = id;
 		this.stock = stock;
 		this.price = price;
