@@ -1,4 +1,4 @@
-package com.jsj.util;
+package com.jsj.pojo;
 
 /**
  * 用于返回秒杀结果

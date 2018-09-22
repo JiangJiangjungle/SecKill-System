@@ -1,7 +1,7 @@
 package com.jsj.service;
 
 import com.jsj.exception.ServiceException;
-import com.jsj.util.ServiceResult;
+import com.jsj.pojo.ServiceResult;
 
 public interface PanicBuyService {
 

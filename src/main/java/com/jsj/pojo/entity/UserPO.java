@@ -1,4 +1,4 @@
-package com.jsj.entity;
+package com.jsj.pojo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

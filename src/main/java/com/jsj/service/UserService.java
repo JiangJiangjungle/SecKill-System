@@ -1,6 +1,6 @@
 package com.jsj.service;
 
-import com.jsj.entity.UserPO;
+import com.jsj.pojo.entity.UserPO;
 import com.jsj.exception.ServiceException;
 
 /**

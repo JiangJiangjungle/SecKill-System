@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.entity.RecordPO;
+import com.jsj.pojo.entity.RecordPO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

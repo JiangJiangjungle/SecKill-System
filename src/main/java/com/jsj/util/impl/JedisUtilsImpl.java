@@ -2,10 +2,11 @@ package com.jsj.util.impl;
 
 import com.jsj.dao.ProductPoMapper;
 import com.jsj.dao.RecordPoMapper;
-import com.jsj.entity.ProductPO;
-import com.jsj.entity.RecordPO;
+import com.jsj.pojo.entity.ProductPO;
+import com.jsj.pojo.entity.RecordPO;
 import com.jsj.exception.DAOException;
 import com.jsj.util.JedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.Alias;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 @Alias("JedisUtils")
 public class JedisUtilsImpl implements JedisUtils {
@@ -39,6 +41,9 @@ public class JedisUtilsImpl implements JedisUtils {
     public void loadData() throws Exception {
         int count = 0;
         Jedis jedis = getJedis();
+        //刷新缓存
+        jedis.flushDB();
+        log.info("刷新缓存");
         List<RecordPO> recordPOList;
         List<ProductPO> productPOList;
         /**
@@ -53,10 +58,12 @@ public class JedisUtilsImpl implements JedisUtils {
                     break;
                 }
                 recordPOList.forEach((RecordPO recordPO) -> jedis.sadd(recordPO.getProductId(), recordPO.getUserId()));
+                log.info("加载交易记录第" + count + "-" + (count + recordPOList.size()) + "项到redis缓存");
                 count += LIMIT_MAX;
             } while (recordPOList.size() == LIMIT_MAX);
-            count = 0;
+
             //加载库存记录
+            count = 0;
             do {
                 productPOList = productPoMapper.getAllStock(count, count + LIMIT_MAX);
                 if (productPOList == null || productPOList.isEmpty()) {
@@ -65,6 +72,7 @@ public class JedisUtilsImpl implements JedisUtils {
                 Map<String, String> stocksMap = new HashMap<>(productPOList.size());
                 productPOList.forEach((ProductPO product) -> stocksMap.put(product.getId(), String.valueOf(product.getStock())));
                 jedis.hmset(TABLE_KEY, stocksMap);
+                log.info("加载库存记录第" + count + "-" + (count + stocksMap.size()) + "项到redis缓存");
                 count += LIMIT_MAX;
             } while (productPOList.size() == LIMIT_MAX);
         } catch (DAOException d) {

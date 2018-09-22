@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.entity.UserPO;
+import com.jsj.pojo.entity.UserPO;
 import com.jsj.exception.DAOException;
 
 import java.util.List;

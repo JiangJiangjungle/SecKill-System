@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.entity.RecordPO;
+import com.jsj.pojo.entity.RecordPO;
 import com.jsj.exception.DAOException;
 import org.apache.ibatis.annotations.Param;
 

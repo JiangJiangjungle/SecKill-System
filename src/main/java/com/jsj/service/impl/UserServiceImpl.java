@@ -1,7 +1,7 @@
 package com.jsj.service.impl;
 
 import com.jsj.dao.UserPoMapper;
-import com.jsj.entity.UserPO;
+import com.jsj.pojo.entity.UserPO;
 import com.jsj.exception.DAOException;
 import com.jsj.exception.ServiceException;
 import com.jsj.service.UserService;

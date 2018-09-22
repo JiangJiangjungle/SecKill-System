@@ -1,17 +1,11 @@
 package com.jsj.config;
 
 
-import com.jsj.dao.RecordPoMapper;
-import com.jsj.entity.RecordPO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import java.util.List;
 
 @Configuration
 public class RedisConfig {

@@ -1,11 +1,10 @@
 package com.jsj.dao;
 
-import com.jsj.entity.ProductPO;
+import com.jsj.pojo.entity.ProductPO;
 import com.jsj.exception.DAOException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -34,6 +33,14 @@ public interface ProductPoMapper {
      * @return
      */
     ProductPO getProductById(String id)throws DAOException;
+
+    /**
+     * 根据主键获取版本id
+     * @param id
+     * @return
+     * @throws DAOException
+     */
+    Integer getVersionId(String id) throws DAOException;
 
     /**
      * 获取所有商品

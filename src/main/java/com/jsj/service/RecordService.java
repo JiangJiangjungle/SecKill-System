@@ -1,6 +1,6 @@
 package com.jsj.service;
 
-import com.jsj.entity.RecordPO;
+import com.jsj.pojo.entity.RecordPO;
 import com.jsj.exception.ServiceException;
 
 /**
@@ -10,14 +10,14 @@ import com.jsj.exception.ServiceException;
 public interface RecordService {
 
     /**
-     * 发送交易记录到消息队列
+     * todo 发送交易记录到消息队列
      * @param userId
      * @param productId
      * @param state
      * @return
      * @throws ServiceException
      */
-    boolean sendRecordToMessageUtil(String userId, String productId, Integer state) throws ServiceException;
+    void sendRecordToMessageQueue(String userId, String productId, Integer state) throws ServiceException;
 
     /**
      * 直接新增交易记录

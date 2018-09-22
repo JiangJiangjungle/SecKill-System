@@ -23,6 +23,10 @@
         select id,stock,price,product_name,version_id,create_time from tb_product WHERE id=#{productId}
     </select>
 
+    <select id="getVersionId" resultType="Integer">
+        select version_id from tb_product WHERE id=#{productId}
+    </select>
+
     <select id="getAllProducts" resultMap="myProduct">
         select id,stock,price,product_name,version_id,create_time from tb_product
         limit #{start},#{end}
@@ -40,7 +44,7 @@
 
     <insert id="updateProductStock">
         UPDATE tb_product SET stock = stock-1,version_id=#{versionId}+1
-        WHERE id=#{id} AND version_id=#{versionId}
+        WHERE id=#{id} AND version_id=#{versionId} and stock>0
     </insert>
 
 </mapper>

@@ -1,4 +1,4 @@
-package com.jsj.vo.common;
+package com.jsj.pojo.vo.common;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
