@@ -1,6 +1,9 @@
 package com.jsj.lock;
 
-
+/**
+ * @author jsj
+ * @date 2018-9-22
+ */
 public abstract class AbstractLock implements Lock {
     /**
      * 获取锁的重试次数
