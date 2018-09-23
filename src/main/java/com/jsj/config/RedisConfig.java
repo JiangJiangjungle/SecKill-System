@@ -1,16 +1,15 @@
 package com.jsj.config;
 
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+@Data
 @Configuration
-@PropertySource("classpath:application.properties")
 public class RedisConfig {
 
     @Value("${spring.redis.host}")
@@ -19,16 +18,13 @@ public class RedisConfig {
     @Value("${spring.redis.port}")
     private int port;
 
-    @Value("${spring.redis.pool.max-idle}")
+    @Value("${spring.redis.jedis.pool.max-idle}")
     private int maxIdle;
 
-    @Value("${spring.redis.pool.min-idle}")
+    @Value("${spring.redis.jedis.pool.min-idle}")
     private int minIdle;
 
-    @Value("${spring.redis.pool.max-wait}")
-    private long maxWaitMillis;
-
-    @Value("${spring.redis.pool.max-active}")
+    @Value("${spring.redis.jedis.pool.max-active}")
     private int maxActive;
 
     @Value("${spring.redis.timeout}")
@@ -37,33 +33,25 @@ public class RedisConfig {
     @Value("${spring.redis.database}")
     private int database;
 
-    @Bean(name = "poolConfig")
-    public JedisPoolConfig initJedisPoolConfig() {
+    @Value("${data.stock-hash-key}")
+    private String stockHashKey;
+    @Value("${data.redis-lock-key}")
+    private String redisLockKey;
+
+    /**
+     * 分页查询限制
+     */
+    public final int LIMIT_MAX = 1000;
+
+    @Bean
+    public JedisPool initJedisPool() {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxTotal(maxActive);
         poolConfig.setMaxIdle(maxIdle);
-        poolConfig.setMaxWaitMillis(maxWaitMillis);
         poolConfig.setMinIdle(minIdle);
         poolConfig.setTestOnBorrow(true);
         poolConfig.setTestOnReturn(true);
         poolConfig.setBlockWhenExhausted(true);
-        return poolConfig;
-    }
-
-    @Bean
-    public JedisPool initJedisPool(@Qualifier("poolConfig") JedisPoolConfig poolConfig) {
         return new JedisPool(poolConfig, host, port, timeout);
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public int getTimeout() {
-        return timeout;
     }
 }

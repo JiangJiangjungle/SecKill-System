@@ -1,22 +1,21 @@
 package com.jsj;
 
 
-import com.jsj.service.PanicBuyingService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-
 @RestController
 @SpringBootApplication
-@MapperScan("com.jsj.mapper")//将项目中对应的mapper类的路径加进来就可以了
+//将项目中对应的mapper类的路径加进来就可以了
+@MapperScan("com.jsj.dao")
+/**
+ * @author jiangshenjie
+ * @date 2018-9-21
+ */
 public class DemoApplication {
-
-    @Resource
-    private PanicBuyingService panicBuyingService;
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
@@ -24,6 +23,6 @@ public class DemoApplication {
 
     @RequestMapping("/")
     String index() {
-        return "Panic Buying System";
+        return "Panic Buy System";
     }
 }

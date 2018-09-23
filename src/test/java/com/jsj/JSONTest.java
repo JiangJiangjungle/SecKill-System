@@ -2,23 +2,14 @@ package com.jsj;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.jsj.web.common.Message;
-import com.jsj.web.req.PanicBuyingRequest;
+import com.jsj.pojo.vo.BuyInformation;
 
 public class JSONTest {
 
     public static void main(String[] args) {
-        PanicBuyingRequest request = new PanicBuyingRequest();
-        request.setUserId(1);
-        request.setProductId(4);
-        Message<PanicBuyingRequest> requestMessage = new Message<PanicBuyingRequest>(request);
-        String msg = JSON.toJSONString(requestMessage);
-        System.out.println(msg);
-
-        Message<PanicBuyingRequest> requestMessage1 = JSON.parseObject(msg, new TypeReference<Message<PanicBuyingRequest>>() {
-        });
-
-        System.out.println(requestMessage1.toString());
+        BuyInformation buyInformation = new BuyInformation();
+        buyInformation.setUserId("64fa02bf-7853-4d11-a671-fe4e72ddbf49");
+        buyInformation.setProductId("909133bb-2930-40a7-a759-281178ade236");
+        System.out.println(JSON.toJSONString(buyInformation));
     }
 }

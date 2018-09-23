@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jsj.dao.UserMapper">
+
+    <resultMap id="myUser" type="com.jsj.pojo.entity.UserDO">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="phone" property="phone"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="getUserById" resultMap="myUser">
+        select * from tb_user WHERE id=#{id}
+    </select>
+
+    <select id="searchUsers" resultMap="myUser" parameterType="java.util.Map">
+        select * from tb_user
+        <where>
+            <if test="userName != null and !&quot;&quot;.equals(userName.trim())">
+                <bind name="userName" value="'%' + userName + '%'"/>
+                and user_name like #{userName}
+            </if>
+            <if test="phone != null and !&quot;&quot;.equals(phone.trim())">
+                <bind name="phone" value="'%' + phone + '%'"/>
+                and phone like #{phone}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_user(id,user_name, phone, create_time)
+        values(#{id},#{userName}, #{phone},#{createTime})
+    </insert>
+
+</mapper>
