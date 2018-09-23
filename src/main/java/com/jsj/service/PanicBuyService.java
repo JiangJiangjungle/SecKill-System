@@ -39,7 +39,7 @@ public interface PanicBuyService {
     BuyResultEnum handleByRedisLock(String userId, String productId, int buyNumber) throws ServiceException;
 
     /**
-     * todo 利用zookeeper分布式锁实现抢购
+     * 利用zookeeper分布式锁实现抢购
      *
      * @param userId
      * @param productId
