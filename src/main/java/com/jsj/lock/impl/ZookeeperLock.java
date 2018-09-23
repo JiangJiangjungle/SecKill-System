@@ -74,9 +74,7 @@ public class ZookeeperLock extends AbstractLock {
             this.ensureZookeeperConnect();
             // 确保根节点存在
             ensureNameSpaceExist(lockNamespace);
-            // 创建临时顺序节点
-            // 节点目录为/xx/xx，节点为lockKey_xxx
-            // currentNode值为lockKey_xxx
+            // 创建临时顺序节点，节点目录为/lockNamespace/lockKey_xxx，节点为lockKey_xxx
             currentNode = zooKeeper.create(lock, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE,
                     CreateMode.EPHEMERAL_SEQUENTIAL).replace(lockNamespace + "/", "");
             // 取出所有子节点

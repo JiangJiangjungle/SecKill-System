@@ -65,6 +65,7 @@ data:
     host: 119.23.204.78
     port: 2181
     timeout: 5000
+    #分布锁的根节点
     lock-namespace: /panic_buy
-    #分布式锁的key
+    #分布锁的key
     lock-key: panic_buy_lock
