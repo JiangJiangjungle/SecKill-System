@@ -3,29 +3,31 @@ package com.jsj.lock.impl;
 import com.jsj.lock.AbstractLock;
 import com.jsj.util.JedisUtils;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
+
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author jsj
  * @date 2018-9-22
  */
+@Slf4j
 @Data
 public class RedisLock extends AbstractLock {
     /**
      * 用于获取缓存连接
      */
     private JedisUtils jedisUtils;
-
     /**
      * 锁key值
      */
-    private String lockKey;
-
+    private final String lockKey;
     /**
      * 锁value值:即线程id
      */
-    private String lockValue;
-
+    private final String lockValue;
     /**
      * 是否持有锁
      */
@@ -73,5 +75,25 @@ public class RedisLock extends AbstractLock {
         }
         locked = false;
         jedisUtils.release(jedis);
+    }
+
+    @Override
+    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
+        long timeout = unit.toMillis(time);
+        while (timeout >= 0) {
+            if (this.tryLock()) {
+                // 获得锁
+                locked = true;
+                return locked;
+            }
+            // 生成[10-200]区间的随机毫秒
+            Random random = new Random();
+            // randNumber 将被赋值为一个 MIN 和 MAX 范围内的随机数
+            long delayMills = random.nextInt(100);
+            timeout -= delayMills;
+            log.debug("等待锁，锁key：{}，锁value：{}，等待时长：{}ms", lockKey, lockValue, delayMills);
+            Thread.sleep(delayMills);
+        }
+        return locked;
     }
 }

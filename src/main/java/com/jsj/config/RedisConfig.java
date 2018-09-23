@@ -33,8 +33,10 @@ public class RedisConfig {
     @Value("${spring.redis.database}")
     private int database;
 
-    @Value("${data.hash-key}")
-    private String hashKey;
+    @Value("${data.stock-hash-key}")
+    private String stockHashKey;
+    @Value("${data.redis-lock-key}")
+    private String redisLockKey;
 
     /**
      * 分页查询限制

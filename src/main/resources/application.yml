@@ -48,7 +48,6 @@ spring:
       auto-commit-interval: 100
       # 指定消息key和消息体的编解码方式
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 #mybatis
 mybatis:
@@ -58,6 +57,14 @@ mybatis:
 #自定义配置
 data:
   #redis库存hash表的key
-  hash-key: product_stocks
+  stock-hash-key: product_stocks
   #redis分布式锁的key
   redis-lock-key: panic_buy_lock
+  #zookeeper
+  zookeeper:
+    host: 119.23.204.78
+    port: 2181
+    timeout: 5000
+    lock-namespace: /panic_buy
+    #分布式锁的key
+    lock-key: panic_buy_lock

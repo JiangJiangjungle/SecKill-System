@@ -1,5 +1,7 @@
 package com.jsj.service.impl;
 
+import com.jsj.config.RedisConfig;
+import com.jsj.config.ZooKeeperConfig;
 import com.jsj.lock.impl.RedisLock;
 import com.jsj.lock.impl.ZookeeperLock;
 import com.jsj.pojo.entity.ProductDO;
@@ -20,6 +22,7 @@ import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
 
 /**
  * 秒杀抢购service
@@ -33,17 +36,18 @@ import java.util.UUID;
 public class PanicBuyServiceImpl implements PanicBuyService {
 
     @Resource
-    private RecordService recordService;
+    private JedisUtils jedisUtils;
+
+    @Resource
+    private RedisConfig redisConfig;
+    @Resource
+    private ZooKeeperConfig zooKeeperConfig;
 
     @Resource
     private ProductMapper productMapper;
 
     @Resource
-    private JedisUtils jedisUtils;
-    @Value("${data.hash-key}")
-    private String hashKey;
-    @Value("${data.redis-lock-key}")
-    private String redisLockKey;
+    private RecordService recordService;
 
     @Transactional(rollbackFor = ServiceException.class)
     @Override
@@ -65,7 +69,7 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 return BuyResultEnum.REPEAT;
             }
             // 查询缓存中的库存数量
-            String stockString = jedis.hget(hashKey, productId);
+            String stockString = jedis.hget(redisConfig.getStockHashKey(), productId);
             int stock = StringUtils.isEmpty(stockString) ? 0 : Integer.parseInt(stockString);
             boolean finished = false;
             if (stock > 0) {
@@ -111,13 +115,13 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 return BuyResultEnum.REPEAT;
             }
             // 查询缓存中的库存数量
-            String stockString = jedis.hget(hashKey, productId);
+            String stockString = jedis.hget(redisConfig.getStockHashKey(), productId);
             int stock = StringUtils.isEmpty(stockString) ? 0 : Integer.parseInt(stockString);
             boolean finished = false;
             if (stock > 0) {
                 String threadID = UUID.randomUUID().toString();
                 // 加redis分布锁
-                RedisLock redisLock = new RedisLock(redisLockKey, threadID, jedisUtils);
+                Lock redisLock = new RedisLock(redisConfig.getRedisLockKey(), threadID, jedisUtils);
                 boolean locked = redisLock.tryLock();
                 if (locked) {
                     // 数据库普通更新库存-1
@@ -157,12 +161,13 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 return BuyResultEnum.REPEAT;
             }
             // 查询缓存中的库存数量
-            String stockString = jedis.hget(hashKey, productId);
+            String stockString = jedis.hget(redisConfig.getStockHashKey(), productId);
             int stock = StringUtils.isEmpty(stockString) ? 0 : Integer.parseInt(stockString);
             boolean finished = false;
             if (stock > 0) {
                 // todo 获取zookeeper分布锁并更新库存
-                ZookeeperLock zookeeperLock = new ZookeeperLock();
+                Lock zookeeperLock = new ZookeeperLock(zooKeeperConfig.getHost(), zooKeeperConfig.getTimeout(),
+                        zooKeeperConfig.getLockNameSpace(), zooKeeperConfig.getLockKey());
                 boolean locked = zookeeperLock.tryLock();
                 if (locked) {
                     // 数据库普通更新库存-1
@@ -212,7 +217,7 @@ public class PanicBuyServiceImpl implements PanicBuyService {
         }
         // 更新缓存中的库存数量
         int nowStock = stock - 1;
-        jedis.hset(hashKey, productId, String.valueOf(nowStock));
+        jedis.hset(redisConfig.getStockHashKey(), productId, String.valueOf(nowStock));
         log.info("商品：" + productId + " ，成功更新缓存中的库存数量:" + nowStock);
         // 添加到成功抢购名单
         jedis.sadd(productId, userId);

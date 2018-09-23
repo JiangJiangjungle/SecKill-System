@@ -43,9 +43,9 @@ public class JedisUtilsImpl implements JedisUtils {
         //刷新缓存
         jedis.flushDB();
         log.info("刷新缓存");
-        String hashKey = redisConfig.getHashKey();
         List<RecordDO> recordDOList;
         List<ProductDO> productDOList;
+        Map<String, String> stocksMap;
         try {
             //加载交易记录
             do {
@@ -65,9 +65,11 @@ public class JedisUtilsImpl implements JedisUtils {
                 if (productDOList == null || productDOList.isEmpty()) {
                     break;
                 }
-                Map<String, String> stocksMap = new HashMap<>(productDOList.size());
-                productDOList.forEach((ProductDO product) -> stocksMap.put(product.getId(), String.valueOf(product.getStock())));
-                jedis.hmset(hashKey, stocksMap);
+                stocksMap = new HashMap<>(productDOList.size());
+                for (ProductDO productDO : productDOList) {
+                    stocksMap.put(productDO.getId(), String.valueOf(productDO.getStock()));
+                }
+                jedis.hmset(redisConfig.getStockHashKey(), stocksMap);
                 log.info("加载库存记录第" + count + "-" + (count + stocksMap.size()) + "项到redis缓存");
                 count += redisConfig.LIMIT_MAX;
             } while (productDOList.size() == redisConfig.LIMIT_MAX);

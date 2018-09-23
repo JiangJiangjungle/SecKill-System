@@ -1,5 +1,9 @@
 package com.jsj.lock;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+
 /**
  * @author jsj
  * @date 2018-9-22
@@ -16,5 +20,15 @@ public abstract class AbstractLock implements Lock {
         while (!this.tryLock() && count > 0) {
             count--;
         }
+    }
+
+    @Override
+    public void lockInterruptibly() throws InterruptedException {
+        this.lock();
+    }
+
+    @Override
+    public Condition newCondition() {
+        return null;
     }
 }
