@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @SpringBootApplication
-//将项目中对应的mapper类的路径加进来就可以了
 @MapperScan("com.jsj.dao")
 /**
  * @author jiangshenjie
