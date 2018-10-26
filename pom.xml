@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jsj</groupId>
+    <groupId>com.com.jsj</groupId>
     <artifactId>panic-buy</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -18,6 +18,7 @@
     </parent>
 
     <modules>
+        <module>app</module>
         <module>eureka</module>
         <module>traffic-limiting</module>
     </modules>
@@ -27,82 +28,29 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-cloud.version>Camden.SR5</spring-cloud.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
+        <lombok.version>1.16.6</lombok.version>
+        <slf4j-api.version>1.7.21</slf4j-api.version>
     </properties>
 
     <dependencies>
-        <!--&lt;!&ndash; 引入Web模块 &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-web</artifactId>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; 测试模块，包括JUnit、Hamcrest、Mockito &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-test</artifactId>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; 核心模块，包括自动配置支持、日志和YAML &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-amqp</artifactId>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash;mybatis支持&ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.mybatis.spring.boot</groupId>-->
-            <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
-            <!--<version>1.1.1</version>-->
-        <!--</dependency>-->
-
-        <!--&lt;!&ndash;redis缓存支持&ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-redis</artifactId>-->
-            <!--<version>1.4.1.RELEASE</version>-->
-        <!--</dependency>-->
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.0.18</version>
-        </dependency>
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.39</version>
-        </dependency>
-
-        <!--以下是工具包-->
-        <!--fastjson-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.31</version>
-        </dependency>
         <!-- 判空工具包 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.6</version>
+            <version>${lombok.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
+            <version>${slf4j-api.version}</version>
         </dependency>
-
-
     </dependencies>
 
     <dependencyManagement>
