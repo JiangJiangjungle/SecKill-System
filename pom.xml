@@ -8,48 +8,61 @@
     <packaging>jar</packaging>
 
     <name>panic-buy</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Panic-Buy Project</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.RELEASE</version>
+        <version>1.4.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <modules>
+        <module>eureka</module>
+        <module>traffic-limiting</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <spring-cloud.version>Camden.SR5</spring-cloud.version>
     </properties>
 
     <dependencies>
-        <!-- 引入Web模块 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- 测试模块，包括JUnit、Hamcrest、Mockito -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!-- 核心模块，包括自动配置支持、日志和YAML -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
-        <!--mybatis支持-->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.1.1</version>
-        </dependency>
+        <!--&lt;!&ndash; 引入Web模块 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-web</artifactId>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; 测试模块，包括JUnit、Hamcrest、Mockito &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-test</artifactId>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; 核心模块，包括自动配置支持、日志和YAML &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-amqp</artifactId>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;mybatis支持&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.mybatis.spring.boot</groupId>-->
+            <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
+            <!--<version>1.1.1</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash;redis缓存支持&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-redis</artifactId>-->
+            <!--<version>1.4.1.RELEASE</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -61,13 +74,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.39</version>
-        </dependency>
-
-        <!--redis缓存支持-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-redis</artifactId>
-            <version>1.4.1.RELEASE</version>
         </dependency>
 
         <!--以下是工具包-->
@@ -98,6 +104,18 @@
 
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
