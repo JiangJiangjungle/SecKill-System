@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.entity.RecordPO;
+import com.jsj.pojo.entity.RecordDO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,14 +15,14 @@ import java.util.UUID;
 @SpringBootTest
 public class RecordDAOTest {
     @Resource
-    private RecordPoMapper recordPoMapper;
+    private RecordMapper recordMapper;
 
     @Test
     public void testAdd()throws Exception{
         UUID userId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
-        RecordPO recordPO = new RecordPO(null, userId.toString(), productId.toString(), 1, new Date());
-        recordPoMapper.addRecord(recordPO);
+        RecordDO recordDO = new RecordDO(null, userId.toString(), productId.toString(), 1, new Date());
+        recordMapper.addRecord(recordDO);
     }
 
     @Test
@@ -38,12 +38,12 @@ public class RecordDAOTest {
     @Test
     public void testSearchByPrimaryId()throws Exception{
         int id = 1;
-        RecordPO recordPO = recordPoMapper.getRecordById(id);
+        RecordDO recordDO = recordMapper.getRecordById(id);
     }
 
     @Test
     public void testSearch()throws Exception{
-        List<RecordPO> recordPOList = recordPoMapper.getAllRecords(0,1000);
-        recordPOList.forEach(System.out::println);
+        List<RecordDO> recordDOList = recordMapper.getAllRecords(0,1000);
+        recordDOList.forEach(System.out::println);
     }
 }

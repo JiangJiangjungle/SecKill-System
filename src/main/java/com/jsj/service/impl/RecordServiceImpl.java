@@ -1,12 +1,14 @@
 package com.jsj.service.impl;
 
-import com.jsj.dao.RecordPoMapper;
-import com.jsj.entity.RecordPO;
+import com.jsj.dao.RecordMapper;
+import com.jsj.pojo.entity.RecordDO;
 import com.jsj.exception.DAOException;
 import com.jsj.exception.ServiceException;
 import com.jsj.service.RecordService;
+import com.jsj.util.KafkaUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,10 +18,13 @@ import java.util.Date;
 @Alias("recordService")
 public class RecordServiceImpl implements RecordService {
     @Resource
-    private RecordPoMapper recordPoMapper;
+    private RecordMapper recordMapper;
+
+    @Autowired
+    private KafkaUtils kafkaUtils;
 
     @Override
-    public boolean sendRecordToMessageUtil(String userId, String productId, Integer state) throws ServiceException {
+    public void sendRecordToMessageQueue(String userId, String productId, Integer state) throws ServiceException {
         if (StringUtils.isEmpty(userId)) {
             throw new ServiceException("userId不能为空");
         }
@@ -29,7 +34,12 @@ public class RecordServiceImpl implements RecordService {
         if (null == state) {
             throw new ServiceException("state不能为空");
         }
-        return true;
+        RecordDO recordDO = new RecordDO();
+        recordDO.setCreateTime(new Date());
+        recordDO.setProductId(productId);
+        recordDO.setState(state);
+        recordDO.setUserId(userId);
+        kafkaUtils.send(recordDO);
     }
 
     @Override
@@ -43,22 +53,22 @@ public class RecordServiceImpl implements RecordService {
         if (null == state) {
             throw new ServiceException("state不能为空");
         }
-        RecordPO recordPO = new RecordPO(userId, productId, state,new Date());
+        RecordDO recordDO = new RecordDO(userId, productId, state, new Date());
         try {
-            return  recordPoMapper.addRecord(recordPO);
-        } catch (DAOException d){
+            return recordMapper.addRecord(recordDO);
+        } catch (DAOException d) {
             throw new ServiceException("操作失败");
         }
     }
 
     @Override
-    public RecordPO searchById(Integer id) throws ServiceException {
+    public RecordDO searchById(Integer id) throws ServiceException {
         if (null == id) {
             throw new ServiceException("id不能为空");
         }
         try {
-            return  recordPoMapper.getRecordById(id);
-        } catch (DAOException d){
+            return recordMapper.getRecordById(id);
+        } catch (DAOException d) {
             throw new ServiceException("操作失败");
         }
     }

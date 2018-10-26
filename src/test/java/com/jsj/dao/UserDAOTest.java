@@ -1,6 +1,6 @@
 package com.jsj.dao;
 
-import com.jsj.entity.UserPO;
+import com.jsj.pojo.entity.UserDO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,15 +13,18 @@ import java.util.*;
 @SpringBootTest
 public class UserDAOTest {
     @Resource
-    private UserPoMapper userPoMapper;
+    private UserMapper userMapper;
 
     @Test
     public void testAdd()throws Exception{
-        UUID id = UUID.randomUUID();
-        String name = "jsj";
-        String phoneNumber="17620756782";
-        UserPO userPO = new UserPO(id.toString(),name,phoneNumber,new Date());
-        boolean finished = userPoMapper.addUser(userPO);
+        for (int i=0;i<10;i++){
+            UUID id = UUID.randomUUID();
+            String name = "jsj"+i;
+            String phoneNumber="1762075678"+i;
+            UserDO userDO = new UserDO(id.toString(),name,phoneNumber,new Date());
+            boolean finished = userMapper.addUser(userDO);
+        }
+
     }
 
     @Test
@@ -44,8 +47,8 @@ public class UserDAOTest {
         Map<String,Object> map = new HashMap<>(2);
         map.put("userName","jsj");
         map.put("phone","2075");
-        List<UserPO> userPOList = userPoMapper.searchUsers(map);
-        userPOList.forEach(System.out::println);
+        List<UserDO> userDOList = userMapper.searchUsers(map);
+        userDOList.forEach(System.out::println);
     }
 
 }

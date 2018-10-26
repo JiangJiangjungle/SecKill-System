@@ -1,4 +1,4 @@
-package com.jsj.entity;
+package com.jsj.pojo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecordPO {
+public class RecordDO {
     /**
      * 交易记录id(主键)
      */
@@ -37,7 +37,7 @@ public class RecordPO {
      */
     private Date createTime;
 
-    public RecordPO(String userId, String productId, Integer state, Date createTime) {
+    public RecordDO(String userId, String productId, Integer state, Date createTime) {
         this.userId = userId;
         this.productId = productId;
         this.state = state;

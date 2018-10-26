@@ -1,6 +1,6 @@
 package com.jsj.service;
 
-import com.jsj.entity.UserPO;
+import com.jsj.pojo.entity.UserDO;
 import com.jsj.exception.ServiceException;
 
 /**
@@ -15,7 +15,7 @@ public interface UserService {
      * @return
      * @throws ServiceException
      */
-    UserPO searchUserById(String id) throws ServiceException;
+    UserDO searchUserById(String id) throws ServiceException;
 
     /**
      * 新增用户

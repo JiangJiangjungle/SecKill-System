@@ -1,4 +1,4 @@
-package com.jsj.entity;
+package com.jsj.pojo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPO {
+public class UserDO {
     /**
      * 用户id(主键)
      */
@@ -33,7 +33,7 @@ public class UserPO {
      */
     private Date createTime;
 
-    public UserPO(String id) {
+    public UserDO(String id) {
         this.id = id;
     }
 }

@@ -1,18 +1,14 @@
 package com.jsj.config;
 
 
-import com.jsj.dao.RecordPoMapper;
-import com.jsj.entity.RecordPO;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import java.util.List;
-
+@Data
 @Configuration
 public class RedisConfig {
 
@@ -37,6 +33,15 @@ public class RedisConfig {
     @Value("${spring.redis.database}")
     private int database;
 
+    @Value("${data.stock-hash-key}")
+    private String stockHashKey;
+    @Value("${data.redis-lock-key}")
+    private String redisLockKey;
+
+    /**
+     * 分页查询限制
+     */
+    public final int LIMIT_MAX = 1000;
 
     @Bean
     public JedisPool initJedisPool() {
@@ -48,17 +53,5 @@ public class RedisConfig {
         poolConfig.setTestOnReturn(true);
         poolConfig.setBlockWhenExhausted(true);
         return new JedisPool(poolConfig, host, port, timeout);
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public int getTimeout() {
-        return timeout;
     }
 }

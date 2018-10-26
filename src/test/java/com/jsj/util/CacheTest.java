@@ -1,6 +1,5 @@
 package com.jsj.util;
 
-import com.jsj.util.RedisCachePool;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

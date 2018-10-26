@@ -9,7 +9,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://119.23.204.78:3306/panic_buy?useUnicode=true&characterEncoding=utf8&useSSL=false
-    username: jsj
+    username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
   #redis缓存
@@ -26,13 +26,46 @@ spring:
         #连接池中的最小空闲连接
         min-idle: 0
     timeout: 3000
+  #kafka
+  kafka:
+    # 指定kafka代理地址，可以多个
+    bootstrap-servers: 119.23.204.78:9092
+    #provider
+    producer:
+      retries: 0
+      # 每次批量发送消息的数量
+      batch-size: 16384
+      buffer-memory: 33554432
+      # 指定消息key和消息体的编解码方式
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #consumer
+    consumer:
+      # 指定默认消费者group id
+      group-id: test-consumer-group
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-commit-interval: 100
+      # 指定消息key和消息体的编解码方式
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 #mybatis
 mybatis:
   mapper-locations: classpath:dao/*.xml
-  type-aliases-package: com.jsj.entity
+  type-aliases-package: com.jsj.pojo.entity
 
 #自定义配置
 data:
   #redis库存hash表的key
-  table-key: product_stocks
+  stock-hash-key: product_stocks
+  #redis分布式锁的key
+  redis-lock-key: panic_buy_lock
+  #zookeeper
+  zookeeper:
+    host: 119.23.204.78
+    port: 2181
+    timeout: 5000
+    #分布锁的根节点
+    lock-namespace: /panic_buy
+    #分布锁的key
+    lock-key: panic_buy_lock
