@@ -17,6 +17,9 @@
         <fastjson.version>1.2.31</fastjson.version>
         <druid.version>1.0.18</druid.version>
         <mysql-connector-java.version>5.1.39</mysql-connector-java.version>
+        <mybatis-spring-boot-starter.version>1.1.1</mybatis-spring-boot-starter.version>
+        <spring-boot-starter-redis.version>1.4.1.RELEASE</spring-boot-starter-redis.version>
+        <zookeeper.version>3.3.6</zookeeper.version>
     </properties>
 
     <dependencies>
@@ -40,17 +43,33 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+        <!--eureka-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
         <!--mybatis支持-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.1.1</version>
+            <version>${mybatis-spring-boot-starter.version}</version>
         </dependency>
         <!--redis缓存支持-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-redis</artifactId>
-            <version>1.4.1.RELEASE</version>
+            <version>${spring-boot-starter-redis.version}</version>
+        </dependency>
+        <!--kafka支持-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <!--zookeeper支持-->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>${zookeeper.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

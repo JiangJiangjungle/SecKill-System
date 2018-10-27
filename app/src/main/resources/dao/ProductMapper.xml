@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.com.jsj.dao.ProductMapper">
+<mapper namespace="com.jsj.app.dao.ProductMapper">
 
-    <resultMap id="myProduct" type="com.jsj.pojo.entity.ProductDO">
+    <resultMap id="myProduct" type="com.jsj.app.pojo.entity.ProductDO">
         <!--
         column:表里面指定的列
         property：对应的javaBean属性
