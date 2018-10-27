@@ -1,7 +1,5 @@
 server:
   port: 8080
-  servlet:
-    context-path: /
 
 spring:
   application:
@@ -56,6 +54,13 @@ mybatis:
   type-aliases-package: com.jsj.app.pojo.entity
 
 #eureka
+eureka:
+  instance:
+    hostname: localhost   # 指定该Eureka实例的主机名
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:1112/eureka/
 
 #自定义配置
 data:
@@ -72,10 +77,3 @@ data:
     lock-namespace: /panic_buy
     #分布锁的key
     lock-key: panic_buy_lock
-eureka:
-  instance:
-    hostname: localhost   # 指定该Eureka实例的主机名
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:1112/eureka/

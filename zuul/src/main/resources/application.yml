@@ -5,7 +5,8 @@ spring:
     name: api-gateway
 eureka:
   instance:
-    hostname: localhost   # 指定该Eureka实例的主机名
+    # 指定该Eureka实例的主机名
+    hostname: localhost
     prefer-ip-address: true
   client:
     serviceUrl:
@@ -18,27 +19,6 @@ zuul:
     panic-buy-service:
       path: /panic-buy-service/buy/**
       serviceId: panic-buy-service
-  ratelimit:
-    enabled: true
-    #代理之后
-    behind-proxy: true
-#    #对应用来标识请求的key的前缀
-#    key-prefix:
-    #对应存储类型（用来存储统计信息）（默认使用内存）
-    repository: IN_MEMORY
-    policies:
-      panic-buy-service:
-        #可选- 每个刷新时间窗口对应的请求数量限制
-        limit: 10
-        #可选-  每个刷新时间窗口对应的请求时间限制（秒）
-        quota: 30
-        # 刷新时间窗口的时间，默认值 (秒)
-        refresh-interval: 60
-        #可选 限流方式
-        type:
-        - URL
-        - USER
-        - ORIGIN
 
 hystrix:
   metrics:
@@ -55,5 +35,3 @@ hystrix:
 ribbon:
   ReadTimeout: 60000
   ConnectTimeout: 60000
-  eager-load:
-    enabled: true

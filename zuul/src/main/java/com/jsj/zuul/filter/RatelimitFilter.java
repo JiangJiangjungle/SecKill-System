@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalTime;
 
 @Slf4j
 @Component
@@ -14,7 +15,7 @@ public class RatelimitFilter extends ZuulFilter {
     /**
      * 初始化 放入 1000令牌/s  时间窗口为 1s
      */
-    private RateLimiter rateLimiter = RateLimiter.create(1000.0);
+    private RateLimiter rateLimiter = RateLimiter.create(10.0);
 
     @Override
     public Object run() {
@@ -24,11 +25,11 @@ public class RatelimitFilter extends ZuulFilter {
             // 过滤该请求，不对其进行路由
             ctx.setSendZuulResponse(false);
             ctx.setResponseStatusCode(401);
+            log.info("Reject! :" + LocalTime.now() + ": " + rateLimiter.getRate());
         } else {
             ctx.setResponseStatusCode(200);
-            log.info("OK !!!");
+            log.info("OK! :" + LocalTime.now() + ": " + rateLimiter.getRate());
         }
-
         return null;
     }
 
