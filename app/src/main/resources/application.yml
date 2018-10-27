@@ -1,10 +1,9 @@
 server:
-  address: 127.0.0.1
   port: 8080
-  servlet:
-    context-path: /
 
 spring:
+  application:
+    name: panic-buy-service
   #数据源
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
