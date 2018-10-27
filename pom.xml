@@ -20,7 +20,7 @@
     <modules>
         <module>app</module>
         <module>eureka</module>
-        <module>traffic-limiting</module>
+        <module>zuul</module>
     </modules>
 
     <properties>

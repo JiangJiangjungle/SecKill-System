@@ -2,6 +2,11 @@ server:
   port: 1112
 
 eureka:
+  server:
+    #关闭自我保护
+    enable-self-preservation: false
+    #无效节点清理间隔
+    eviction-interval-timer-in-ms: 1000
   instance:
     hostname: localhost
   client:
