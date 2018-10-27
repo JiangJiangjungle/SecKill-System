@@ -7,14 +7,14 @@ spring:
   #数据源
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://119.23.204.78:3306/panic_buy?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/panic_buy?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
   #redis缓存
   redis:
     database: 0
-    host: 119.23.204.78
+    host: 127.0.0.1
     port: 6379
     jedis:
       pool:
@@ -28,7 +28,7 @@ spring:
   #kafka
   kafka:
     # 指定kafka代理地址，可以多个
-    bootstrap-servers: 119.23.204.78:9092
+    bootstrap-servers: 127.0.0.1:9092
     #provider
     producer:
       retries: 0
@@ -70,7 +70,7 @@ data:
   redis-lock-key: panic_buy_lock
   #zookeeper
   zookeeper:
-    host: 119.23.204.78
+    host: 127.0.0.1
     port: 2181
     timeout: 5000
     #分布锁的根节点
