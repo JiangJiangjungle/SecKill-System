@@ -57,6 +57,8 @@ public interface ProductMapper {
      */
     Integer getVersionId(String id) throws DAOException;
 
+    Integer getStockById(String id) throws DAOException;
+
     /**
      * 获取所有商品
      *

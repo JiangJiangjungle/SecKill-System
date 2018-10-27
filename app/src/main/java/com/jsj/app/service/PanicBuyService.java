@@ -17,17 +17,6 @@ public interface PanicBuyService {
     BuyResultEnum handleByOptimisticLock(String userId, String productId, int buyNumber) throws ServiceException;
 
     /**
-     * todo 利用Mysql悲观锁实现抢购
-     *
-     * @param userId
-     * @param productId
-     * @param buyNumber
-     * @return
-     * @throws ServiceException
-     */
-    BuyResultEnum handleByPessimisticLock(String userId, String productId, int buyNumber) throws ServiceException;
-
-    /**
      * 利用redis分布式锁实现抢购
      *
      * @param userId

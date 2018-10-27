@@ -9,8 +9,8 @@ package com.jsj.app.constant;
 public enum BuyResultEnum {
     // 秒杀成功
     SUCCESS(1, "秒杀成功"),
-    // 秒杀失败
-    FAIL(0, "秒杀失败"),
+    // 库存不足
+    FAIL(0, "库存不足"),
     //重复秒杀
     REPEAT(-1, "重复秒杀"),
     //参数错误

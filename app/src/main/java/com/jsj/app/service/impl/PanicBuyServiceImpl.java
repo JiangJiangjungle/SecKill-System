@@ -62,36 +62,36 @@ public class PanicBuyServiceImpl implements PanicBuyService {
         try {
             // 检查成功抢购名单中是否包含该用户
             jedis = jedisUtils.getJedis();
-            boolean hasUser = jedis.sismember(productId, userId);
-            if (hasUser) {
+            if (jedis.sismember(productId, userId)) {
                 // 返回重复秒杀信息
                 return BuyResultEnum.REPEAT;
             }
             // 查询缓存中的库存数量
             String stockString = jedis.hget(redisConfig.getStockHashKey(), productId);
             int stock = StringUtils.isEmpty(stockString) ? 0 : Integer.parseInt(stockString);
-            boolean finished = false;
+            boolean updated = false;
             if (stock > 0) {
                 // 乐观锁更新数据库中的库存数量
                 Integer versionId = productMapper.getVersionId(productId);
-                finished = productMapper.updateStockByLock(productId, versionId);
-                // 若更新成功，则同时更新缓存并异步发送消息
-                if (finished) {
-                    this.updateAfterSuccess(userId, productId, stock, jedis);
+                updated = productMapper.updateStockByLock(productId, versionId);
+                // 若更新成功，获取最新的stock
+                if (updated){
+                    stock = productMapper.getStockById(productId);
                 }
             }
-            return finished ? BuyResultEnum.SUCCESS : BuyResultEnum.FAIL;
+
+            // 若更新成功，则同时更新缓存并异步发送消息
+            if (updated) {
+                this.updateAfterSuccess(userId, productId, stock, jedis);
+                return BuyResultEnum.SUCCESS;
+            }
+            log.info("库存不足，秒杀失败..userId: " + userId);
+            return BuyResultEnum.FAIL;
         } catch (DAOException d) {
             throw new ServiceException("DAOException导致");
         } finally {
             jedisUtils.release(jedis);
         }
-    }
-
-    @Transactional(rollbackFor = ServiceException.class)
-    @Override
-    public BuyResultEnum handleByPessimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
-        return null;
     }
 
     @Transactional(rollbackFor = ServiceException.class)
@@ -108,31 +108,36 @@ public class PanicBuyServiceImpl implements PanicBuyService {
         try {
             // 检查成功抢购名单中是否包含该用户
             jedis = jedisUtils.getJedis();
-            boolean hasUser = jedis.sismember(productId, userId);
-            if (hasUser) {
+            if (jedis.sismember(productId, userId)) {
                 // 返回重复秒杀信息
                 return BuyResultEnum.REPEAT;
             }
             // 查询缓存中的库存数量
             String stockString = jedis.hget(redisConfig.getStockHashKey(), productId);
             int stock = StringUtils.isEmpty(stockString) ? 0 : Integer.parseInt(stockString);
-            boolean finished = false;
+            boolean updated = false;
             if (stock > 0) {
                 String threadID = UUID.randomUUID().toString();
                 // 加redis分布锁
                 Lock redisLock = new RedisLock(redisConfig.getRedisLockKey(), threadID, jedisUtils);
-                boolean locked = redisLock.tryLock();
-                if (locked) {
+                if (redisLock.tryLock()) {
                     // 数据库普通更新库存-1
-                    finished = productMapper.updateStock(productId);
-                }
-                redisLock.unlock();
-                // 若更新成功，则同时更新缓存并异步发送消息
-                if (finished) {
-                    this.updateAfterSuccess(userId, productId, stock, jedis);
+                    updated = productMapper.updateStock(productId);
+                    // 若更新成功，获取最新的stock
+                    if (updated){
+                        stock = productMapper.getStockById(productId);
+                    }
+                    redisLock.unlock();
                 }
             }
-            return finished ? BuyResultEnum.SUCCESS : BuyResultEnum.FAIL;
+
+            // 若更新成功，则同时更新缓存并异步发送消息
+            if (updated) {
+                this.updateAfterSuccess(userId, productId, stock, jedis);
+                return BuyResultEnum.SUCCESS;
+            }
+            log.info("库存不足，秒杀失败..userId: " + userId);
+            return BuyResultEnum.FAIL;
         } catch (DAOException d) {
             throw new ServiceException("DAOException导致");
         } finally {
@@ -154,30 +159,37 @@ public class PanicBuyServiceImpl implements PanicBuyService {
         try {
             // 检查成功抢购名单中是否包含该用户
             jedis = jedisUtils.getJedis();
-            boolean hasUser = jedis.sismember(productId, userId);
-            if (hasUser) {
+            if (jedis.sismember(productId, userId)) {
                 // 返回重复秒杀信息
                 return BuyResultEnum.REPEAT;
             }
             // 查询缓存中的库存数量
             String stockString = jedis.hget(redisConfig.getStockHashKey(), productId);
             int stock = StringUtils.isEmpty(stockString) ? 0 : Integer.parseInt(stockString);
-            boolean finished = false;
+            boolean updated = false;
             if (stock > 0) {
-                // todo 获取zookeeper分布锁并更新库存
+                // 获取zookeeper分布锁并更新库存
                 Lock zookeeperLock = new ZookeeperLock(zooKeeperConfig.getHost(), zooKeeperConfig.getTimeout(),
                         zooKeeperConfig.getLockNameSpace(), zooKeeperConfig.getLockKey());
                 boolean locked = zookeeperLock.tryLock();
                 if (locked) {
-                    // 数据库普通更新库存-1
-                    finished = productMapper.updateStock(productId);
-                }
-                // 若更新成功，则同时更新缓存并异步发送消息
-                if (finished) {
-                    this.updateAfterSuccess(userId, productId, stock, jedis);
+                    // 若加锁之后数据库stock>0,则数据库普通更新库存-1
+                    updated = productMapper.updateStock(productId);
+                    // 若更新成功，获取最新的stock
+                    if (updated){
+                        stock = productMapper.getStockById(productId);
+                    }
+                    zookeeperLock.unlock();
                 }
             }
-            return finished ? BuyResultEnum.SUCCESS : BuyResultEnum.FAIL;
+
+            // 若更新成功，则同时更新缓存并异步发送消息
+            if (updated) {
+                this.updateAfterSuccess(userId, productId, stock, jedis);
+                return BuyResultEnum.SUCCESS;
+            }
+            log.info("库存不足，秒杀失败..userId: " + userId);
+            return BuyResultEnum.FAIL;
         } catch (DAOException d) {
             throw new ServiceException("DAOException导致");
         } finally {
