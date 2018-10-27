@@ -6,14 +6,13 @@ import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalTime;
 
 @Slf4j
 @Component
 public class RatelimitFilter extends ZuulFilter {
     /**
-     * 初始化 放入 1000令牌/s  时间窗口为 1s
+     * 初始化 放入 10令牌/s  时间窗口为 1s
      */
     private RateLimiter rateLimiter = RateLimiter.create(10.0);
 
