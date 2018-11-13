@@ -11,6 +11,7 @@
  
 ### SQL
 
+DROP TABLE IF EXISTS tb_user;
 CREATE TABLE `tb_user`(
     `id` int(32) not null AUTO_INCREMENT comment 'ID',
     `user_name` varchar (50) not null comment '用户名',
@@ -19,6 +20,7 @@ CREATE TABLE `tb_user`(
     primary key (`id`)
 ) ENGINE=InnoDB default charset='utf8';
 
+DROP TABLE IF EXISTS tb_product;
 CREATE TABLE `tb_product` (
   `id` int(32) not null AUTO_INCREMENT COMMENT 'ID',
   `product_name` varchar(50) not null COMMENT '产品名称',
@@ -29,6 +31,7 @@ CREATE TABLE `tb_product` (
   primary key (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
+DROP TABLE IF EXISTS tb_record;
 CREATE TABLE `tb_record`(
     `id` int(64) not null AUTO_INCREMENT comment 'ID',
     `user_id` int(32) not null comment '用户ID',
