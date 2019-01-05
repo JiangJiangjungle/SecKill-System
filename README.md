@@ -9,6 +9,8 @@
  - 消息队列：**Kafka**
  - 数据库：**MySQL**
  
+ -------------------
+ 
 ### SQL
 
 DROP TABLE IF EXISTS tb_user;
@@ -43,6 +45,8 @@ CREATE TABLE `tb_record`(
     key key_product_id(`product_id`),
     key key_user_id_product_id (`user_id`,`product_id`)
 )ENGINE=InnoDB default charset='utf8';
+
+-------------------
  
 ### 主要特性
 
@@ -65,7 +69,5 @@ CREATE TABLE `tb_record`(
 #### 限流
 
 利用zuul-ratelimit提供的令牌桶算法，在API网关层实现限流
- 
-### 联系方式
- - QQ：741294595
- - 邮箱: <741294595jsj@gmail.com>
+
+-------------------
