@@ -2,16 +2,16 @@
 
 一个基于Spring Boot的高并发秒杀抢购解决方案，用于个人学习。欢迎提供意见和建议
  
+ 
 ### 项目结构
- - 服务注册和发现中心：**Eureka**
- - API网关：**Zuul**
- - 缓存：**Redis**
- - 消息队列：**Kafka**
- - 数据库：**MySQL**
+   - 服务注册和发现中心：**Eureka**
+   - API网关：**Zuul**
+   - 缓存：**Redis**
+   - 消息队列：**Kafka**
+   - 数据库：**MySQL**
+
  
- -------------------
- 
-### SQL
+# SQL
 
 DROP TABLE IF EXISTS tb_user;
 CREATE TABLE `tb_user`(
@@ -46,28 +46,24 @@ CREATE TABLE `tb_record`(
     key key_user_id_product_id (`user_id`,`product_id`)
 )ENGINE=InnoDB default charset='utf8';
 
--------------------
+# 主要特性
+
+ - #### 缓存查询
+
+   预加载商品库存到Redis缓存，提高查询速率
+
+ - #### 数据一致性
+
+   提供3种加锁方案,并且在一个事务中：MySQL商品库存更新后，立即更新缓存中的库存
  
-### 主要特性
+   - ***MySQL乐观锁***
+   - ***Redis锁***
+   - ***ZooKeeper锁***
 
-#### 缓存查询
+ - #### 异步通信
 
-预加载商品库存到Redis缓存，提高查询速率
+   利用Kafka实现交易记录的生产和异步消费，降低请求响应时间
 
-#### 数据一致性
+ - #### 限流
 
-提供3种加锁方案,并且在一个事务中：MySQL商品库存更新后，立即更新缓存中的库存
-
- - **MySQL乐观锁**
- - **Redis锁**
- - **ZooKeeper锁**
-
-#### 异步通信
-
-利用Kafka实现交易记录的生产和异步消费，降低请求响应时间
-
-#### 限流
-
-利用zuul-ratelimit提供的令牌桶算法，在API网关层实现限流
-
--------------------
+   利用zuul-ratelimit提供的令牌桶算法，在API网关层实现限流
