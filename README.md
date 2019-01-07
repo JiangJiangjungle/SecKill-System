@@ -1,4 +1,4 @@
-# panic-buy
+# SecKill-System
 
 一个基于Spring Boot的高并发秒杀抢购解决方案，用于个人学习。欢迎提供意见和建议
  
