@@ -17,7 +17,7 @@ import java.util.Date;
 @Service
 @Alias("recordService")
 public class RecordServiceImpl implements RecordService {
-    @Resource
+    @Autowired
     private RecordMapper recordMapper;
 
     @Autowired

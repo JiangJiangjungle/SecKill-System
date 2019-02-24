@@ -14,7 +14,7 @@ public class RatelimitFilter extends ZuulFilter {
     /**
      * 初始化 放入 10令牌/s  时间窗口为 1s
      */
-    private RateLimiter rateLimiter = RateLimiter.create(10.0);
+    private RateLimiter rateLimiter = RateLimiter.create(100.0);
 
     @Override
     public Object run() {

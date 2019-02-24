@@ -9,6 +9,7 @@ import com.jsj.app.pojo.entity.RecordDO;
 import com.jsj.app.util.JedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.Alias;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -23,13 +24,13 @@ import java.util.Map;
 @Component
 @Alias("JedisUtils")
 public class JedisUtilsImpl implements JedisUtils {
-    @Resource
+    @Autowired
     private JedisPool jedisPool;
-    @Resource
+    @Autowired
     private RedisConfig redisConfig;
-    @Resource
+    @Autowired
     private RecordMapper recordMapper;
-    @Resource
+    @Autowired
     private ProductMapper productMapper;
 
 

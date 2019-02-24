@@ -15,6 +15,7 @@ import com.jsj.app.util.JedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
@@ -34,18 +35,18 @@ import java.util.concurrent.locks.Lock;
 @Alias("panicBuyService")
 public class PanicBuyServiceImpl implements PanicBuyService {
 
-    @Resource
+    @Autowired
     private JedisUtils jedisUtils;
 
-    @Resource
+    @Autowired
     private RedisConfig redisConfig;
-    @Resource
+    @Autowired
     private ZooKeeperConfig zooKeeperConfig;
 
-    @Resource
+    @Autowired
     private ProductMapper productMapper;
 
-    @Resource
+    @Autowired
     private RecordService recordService;
 
     @Transactional(rollbackFor = ServiceException.class)
@@ -74,19 +75,15 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 // 乐观锁更新数据库中的库存数量
                 Integer versionId = productMapper.getVersionId(productId);
                 updated = productMapper.updateStockByLock(productId, versionId);
-                // 若更新成功，获取最新的stock
-                if (updated){
-                    stock = productMapper.getStockById(productId);
-                }
             }
-
             // 若更新成功，则同时更新缓存并异步发送消息
             if (updated) {
                 this.updateAfterSuccess(userId, productId, stock, jedis);
                 return BuyResultEnum.SUCCESS;
+            }else {
+                log.info("库存不足，秒杀失败..userId: " + userId);
+                return BuyResultEnum.FAIL;
             }
-            log.info("库存不足，秒杀失败..userId: " + userId);
-            return BuyResultEnum.FAIL;
         } catch (DAOException d) {
             throw new ServiceException("DAOException导致");
         } finally {
@@ -121,13 +118,12 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 // 加redis分布锁
                 Lock redisLock = new RedisLock(redisConfig.getRedisLockKey(), threadID, jedisUtils);
                 if (redisLock.tryLock()) {
+                    log.info("商品：" + productId + " ，用户：" + userId + " ，获取redis锁成功！");
                     // 数据库普通更新库存-1
                     updated = productMapper.updateStock(productId);
-                    // 若更新成功，获取最新的stock
-                    if (updated){
-                        stock = productMapper.getStockById(productId);
-                    }
                     redisLock.unlock();
+                } else {
+                    log.info("商品：" + productId + " ，用户：" + userId + " ，获取redis锁失败！");
                 }
             }
 
@@ -175,10 +171,6 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 if (locked) {
                     // 若加锁之后数据库stock>0,则数据库普通更新库存-1
                     updated = productMapper.updateStock(productId);
-                    // 若更新成功，获取最新的stock
-                    if (updated){
-                        stock = productMapper.getStockById(productId);
-                    }
                     zookeeperLock.unlock();
                 }
             }
@@ -229,7 +221,7 @@ public class PanicBuyServiceImpl implements PanicBuyService {
         // 更新缓存中的库存数量
         int nowStock = stock - 1;
         jedis.hset(redisConfig.getStockHashKey(), productId, String.valueOf(nowStock));
-        log.info("商品：" + productId + " ，成功更新缓存中的库存数量:" + nowStock);
+        log.info("商品：" + productId+ " ，用户：" + userId + " ，成功更新缓存中的库存数量:" + nowStock);
         // 添加到成功抢购名单
         jedis.sadd(productId, userId);
         log.info("商品：" + productId + " ，用户：" + userId + " ，添加到成功抢购名单");
