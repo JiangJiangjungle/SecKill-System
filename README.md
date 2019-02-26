@@ -72,6 +72,8 @@ CREATE TABLE `tb_record`(
 - #### 测试工具
 
   Jmeter-5.0
+  
+  ![test_config](https://github.com/JiangJiangjungle/SecKill-System/blob/master/figures/test_config.png)
 
 - #### 数据库部署
 
