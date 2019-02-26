@@ -67,3 +67,42 @@ CREATE TABLE `tb_record`(
  - #### 限流
 
    利用zuul-ratelimit提供的令牌桶算法，在API网关层实现限流
+
+# 测试
+
+- #### 测试工具
+
+  Jmeter-5.0
+
+- #### 数据库部署
+
+  阿里云ECS，利用docker简单部署
+  
+- #### redis部署
+
+  阿里云ECS，利用docker简单部署
+
+- #### zookeeper部署
+
+  阿里云ECS，利用docker简单部署,节点数：1
+ 
+- #### kafka部署
+
+  阿里云ECS，利用docker简单部署,节点数：1
+  
+- #### Eureka部署
+
+  本地启动
+  
+- #### Spring-Zuul部署
+
+  本地启动，令牌发放速率100个/s
+  
+- #### 应用部署
+
+  本地启动
+  
+- #### 测试结果
+
+  99%以上请求被拦截在API网关层，平均响应实际在100ms以内。
+  
