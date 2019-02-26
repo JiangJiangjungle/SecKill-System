@@ -41,7 +41,6 @@ CREATE TABLE `tb_record`(
     `state` tinyint(3) not null comment '秒杀状态: 1秒杀成功,0秒杀失败,-1重复秒杀,-2系统异常',
     `create_time` datetime not null default now() comment '创建时间',
     primary key (`id`),
-    key key_user_id (`user_id`),
     key key_product_id(`product_id`),
     key key_user_id_product_id (`user_id`,`product_id`)
 )ENGINE=InnoDB default charset='utf8';
