@@ -31,8 +31,7 @@ public class PanicBuyController {
      * @return
      */
     @PostMapping("/ByOptimisticLock")
-    public Message<?> handleByOptimisticLock(@RequestBody BuyInformation buyInformation) {
-        log.info("调用接口/buy/ByOptimisticLock: " + LocalTime.now());
+    public Message<?> handleByOptimisticLock(@RequestBody BuyInformation buyInformation) throws Exception{
         Message<Object> message = new Message<>();
         BuyResultEnum result;
         // 参数判空
@@ -47,16 +46,9 @@ public class PanicBuyController {
         // 获取商品id
         String productId = buyInformation.getProductId();
         // 利用乐观锁参与抢购，返回抢购结果
-        try {
-            result = panicBuyService.handleByOptimisticLock(userId, productId, 1);
-            message.setStatusCode(result.getValue());
-            message.setStatusMessage(result.getLabel());
-        } catch (ServiceException s) {
-            result = BuyResultEnum.SYSTEM_EXCEPTION;
-            message.setStatusCode(result.getValue());
-            message.setStatusMessage(result.getLabel());
-            return message;
-        }
+        result = panicBuyService.handleByOptimisticLock(userId, productId, 1);
+        message.setStatusCode(result.getValue());
+        message.setStatusMessage(result.getLabel());
         // 返回结果
         return message;
     }
@@ -68,8 +60,7 @@ public class PanicBuyController {
      * @return
      */
     @PostMapping("/ByRedisLock")
-    public Message<?> handleByRedisLock(@RequestBody BuyInformation buyInformation) {
-        log.info("调用接口：/buy/ByRedisLock: " + LocalTime.now());
+    public Message<?> handleByRedisLock(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
         BuyResultEnum result;
         // 参数判空
@@ -84,16 +75,9 @@ public class PanicBuyController {
         // 获取商品id
         String productId = buyInformation.getProductId();
         // 利用redis分布锁参与抢购，返回抢购结果
-        try {
-            result = panicBuyService.handleByRedisLock(userId, productId, 1);
-            message.setStatusCode(result.getValue());
-            message.setStatusMessage(result.getLabel());
-        } catch (ServiceException s) {
-            result = BuyResultEnum.SYSTEM_EXCEPTION;
-            message.setStatusCode(result.getValue());
-            message.setStatusMessage(result.getLabel());
-            return message;
-        }
+        result = panicBuyService.handleByRedisLock(userId, productId, 1);
+        message.setStatusCode(result.getValue());
+        message.setStatusMessage(result.getLabel());
         // 返回结果
         return message;
     }
@@ -105,8 +89,7 @@ public class PanicBuyController {
      * @return
      */
     @PostMapping("/ByZookeeperLock")
-    public Message<?> handleByZookeeperLock(@RequestBody BuyInformation buyInformation) {
-        log.info("调用接口：/buy/ByZookeeperLock: " + LocalTime.now());
+    public Message<?> handleByZookeeperLock(@RequestBody BuyInformation buyInformation)  throws Exception{
         Message<Object> message = new Message<>();
         BuyResultEnum result;
         // 参数判空
@@ -121,16 +104,9 @@ public class PanicBuyController {
         // 获取商品id
         String productId = buyInformation.getProductId();
         // 利用zookeeper分布锁参与抢购，返回抢购结果
-        try {
-            result = panicBuyService.handleByZookeeperLock(userId, productId, 1);
-            message.setStatusCode(result.getValue());
-            message.setStatusMessage(result.getLabel());
-        } catch (ServiceException s) {
-            result = BuyResultEnum.SYSTEM_EXCEPTION;
-            message.setStatusCode(result.getValue());
-            message.setStatusMessage(result.getLabel());
-            return message;
-        }
+        result = panicBuyService.handleByZookeeperLock(userId, productId, 1);
+        message.setStatusCode(result.getValue());
+        message.setStatusMessage(result.getLabel());
         // 返回结果
         return message;
     }

@@ -51,12 +51,6 @@ public class PanicBuyServiceImpl implements PanicBuyService {
     @Transactional(rollbackFor = ServiceException.class)
     @Override
     public BuyResultEnum handleByOptimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
-        if (StringUtils.isEmpty(userId)) {
-            throw new ServiceException("userId不能为空");
-        }
-        if (StringUtils.isEmpty(productId)) {
-            throw new ServiceException("productId不能为空");
-        }
         log.info("商品：" + productId + " ，用户：" + userId + " ，调用handleByOptimisticLock方法");
         Jedis jedis = null;
         try {
@@ -93,12 +87,6 @@ public class PanicBuyServiceImpl implements PanicBuyService {
     @Transactional(rollbackFor = ServiceException.class)
     @Override
     public BuyResultEnum handleByRedisLock(String userId, String productId, int buyNumber) throws ServiceException {
-        if (StringUtils.isEmpty(userId)) {
-            throw new ServiceException("userId不能为空");
-        }
-        if (StringUtils.isEmpty(productId)) {
-            throw new ServiceException("productId不能为空");
-        }
         log.info("商品：" + productId + " ，用户：" + userId + " ，调用handleByRedisLock方法");
         Jedis jedis = null;
         try {
@@ -143,12 +131,6 @@ public class PanicBuyServiceImpl implements PanicBuyService {
     @Transactional(rollbackFor = ServiceException.class)
     @Override
     public BuyResultEnum handleByZookeeperLock(String userId, String productId, int buyNumber) throws ServiceException {
-        if (StringUtils.isEmpty(userId)) {
-            throw new ServiceException("userId不能为空");
-        }
-        if (StringUtils.isEmpty(productId)) {
-            throw new ServiceException("productId不能为空");
-        }
         log.info("商品：" + productId + " ，用户：" + userId + " ，调用handleByZookeeperLock方法");
         Jedis jedis = null;
         try {
