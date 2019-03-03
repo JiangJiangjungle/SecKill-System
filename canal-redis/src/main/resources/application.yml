@@ -1,0 +1,35 @@
+
+spring:
+  application:
+    name: canal-redis
+  #redis缓存
+  redis:
+    database: 0
+    host: 119.23.204.78
+    port: 6379
+    jedis:
+      pool:
+        #连接池最大连接数
+        max-active: 5
+        #连接池中的最大空闲连接
+        max-idle: 1
+        #连接池中的最小空闲连接
+        min-idle: 1
+    timeout: 3000
+
+#canal-server配置信息
+canal-server:
+  host: 127.0.0.1
+  port: 11111
+  destination: example
+  username:
+  password:
+  subscribe: .*\..*
+
+#自定义配置
+data:
+  #mysql表的商品字段
+  id: id
+  stock: stock
+  #redis库存hash表的key
+  stock-redis-key: product_stocks

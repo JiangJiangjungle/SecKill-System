@@ -43,20 +43,20 @@ public class KafkaUtilsImpl implements KafkaUtils {
     }
 
 
-    @KafkaListener(topics = {TOPIC})
-    public void listen(ConsumerRecord<?, ?> record) {
-        Optional<?> kafkaMessage = Optional.ofNullable(record.value());
-        if (kafkaMessage.isPresent()) {
-            Object message = kafkaMessage.get();
-            log.info("获取消息record :" + record);
-            RecordDO recordDO = JSON.parseObject((String) message, new TypeReference<RecordDO>() {
-            });
-            try {
-                recordMapper.addRecord(recordDO);
-            } catch (DAOException d) {
-                log.info("新增交易记录失败");
-            }
-            log.info("新增交易记录 :" + recordDO);
-        }
-    }
+//    @KafkaListener(topics = {TOPIC})
+//    public void listen(ConsumerRecord<?, ?> record) {
+//        Optional<?> kafkaMessage = Optional.ofNullable(record.value());
+//        if (kafkaMessage.isPresent()) {
+//            Object message = kafkaMessage.get();
+//            log.info("获取消息record :" + record);
+//            RecordDO recordDO = JSON.parseObject((String) message, new TypeReference<RecordDO>() {
+//            });
+//            try {
+//                recordMapper.addRecord(recordDO);
+//            } catch (DAOException d) {
+//                log.info("新增交易记录失败");
+//            }
+//            log.info("新增交易记录 :" + recordDO);
+//        }
+//    }
 }

@@ -7,7 +7,7 @@ spring:
   #数据源
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://119.23.204.78:3306/panic_buy?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://119.23.204.78:3306/sec_kill?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
@@ -23,7 +23,7 @@ spring:
         #连接池中的最大空闲连接
         max-idle: 10
         #连接池中的最小空闲连接
-        min-idle: 0
+        min-idle: 1
     timeout: 3000
   #kafka
   kafka:

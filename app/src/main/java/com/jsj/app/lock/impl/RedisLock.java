@@ -36,7 +36,7 @@ public class RedisLock extends AbstractLock {
     /**
      * 锁超时时间，防止线程在入锁以后，无限的执行等待，默认30000ms
      */
-    private static final long EXPIRE_MILLISECOND = 30000;
+    private static final long EXPIRE_MILLISECOND = 3000;
 
     /**
      * 设置键的过期时间为 millisecond 毫秒

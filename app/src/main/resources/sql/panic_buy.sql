@@ -1,4 +1,4 @@
-use panic_buy;
+use sec_kill;
 
 DROP TABLE IF EXISTS tb_user;
 CREATE TABLE `tb_user`(
@@ -22,7 +22,7 @@ CREATE TABLE `tb_product` (
 
 DROP TABLE IF EXISTS tb_record;
 CREATE TABLE `tb_record`(
-    `id` int(64) not null AUTO_INCREMENT comment 'ID',
+    `id` int(32) not null AUTO_INCREMENT comment 'ID',
     `user_id` int(32) unique not null comment '用户ID',
     `product_id` int(32) unique not null comment '产品ID',
     `state` tinyint(3) not null comment '秒杀状态: 1秒杀成功,0秒杀失败,-1重复秒杀,-2系统异常',

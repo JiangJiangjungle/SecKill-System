@@ -51,7 +51,6 @@ public class PanicBuyServiceImpl implements PanicBuyService {
     @Transactional(rollbackFor = ServiceException.class)
     @Override
     public BuyResultEnum handleByOptimisticLock(String userId, String productId, int buyNumber) throws ServiceException {
-        log.info("商品：" + productId + " ，用户：" + userId + " ，调用handleByOptimisticLock方法");
         Jedis jedis = null;
         try {
             // 检查成功抢购名单中是否包含该用户
@@ -71,12 +70,12 @@ public class PanicBuyServiceImpl implements PanicBuyService {
             }
             // 若更新成功，则同时更新缓存并异步发送消息
             if (updated) {
+                stock--;
                 this.updateAfterSuccess(userId, productId, stock, jedis);
                 return BuyResultEnum.SUCCESS;
-            }else {
-                log.info("库存不足，秒杀失败..userId: " + userId);
-                return BuyResultEnum.FAIL;
             }
+            log.info("库存不足，秒杀失败..userId: " + userId);
+            return BuyResultEnum.FAIL;
         } catch (DAOException d) {
             throw new ServiceException("DAOException导致");
         } finally {
@@ -87,7 +86,6 @@ public class PanicBuyServiceImpl implements PanicBuyService {
     @Transactional(rollbackFor = ServiceException.class)
     @Override
     public BuyResultEnum handleByRedisLock(String userId, String productId, int buyNumber) throws ServiceException {
-        log.info("商品：" + productId + " ，用户：" + userId + " ，调用handleByRedisLock方法");
         Jedis jedis = null;
         try {
             // 检查成功抢购名单中是否包含该用户
@@ -104,18 +102,16 @@ public class PanicBuyServiceImpl implements PanicBuyService {
                 String threadID = UUID.randomUUID().toString();
                 // 加redis分布锁
                 Lock redisLock = new RedisLock(redisConfig.getRedisLockKey(), threadID, jedisUtils);
-                if (redisLock.tryLock()) {
-                    log.info("商品：" + productId + " ，用户：" + userId + " ，获取redis锁成功！");
+                boolean locked = redisLock.tryLock();
+                if (locked) {
                     // 数据库普通更新库存-1
                     updated = productMapper.updateStock(productId);
                     redisLock.unlock();
-                } else {
-                    log.info("商品：" + productId + " ，用户：" + userId + " ，获取redis锁失败！");
                 }
             }
-
             // 若更新成功，则同时更新缓存并异步发送消息
             if (updated) {
+                stock--;
                 this.updateAfterSuccess(userId, productId, stock, jedis);
                 return BuyResultEnum.SUCCESS;
             }
@@ -158,6 +154,7 @@ public class PanicBuyServiceImpl implements PanicBuyService {
 
             // 若更新成功，则同时更新缓存并异步发送消息
             if (updated) {
+                stock--;
                 this.updateAfterSuccess(userId, productId, stock, jedis);
                 return BuyResultEnum.SUCCESS;
             }
@@ -199,15 +196,12 @@ public class PanicBuyServiceImpl implements PanicBuyService {
         if (stock <= 0) {
             return;
         }
-        // 更新缓存中的库存数量
-        int nowStock = stock - 1;
-        jedis.hset(redisConfig.getStockHashKey(), productId, String.valueOf(nowStock));
-        log.info("商品：" + productId+ " ，用户：" + userId + " ，成功更新缓存中的库存数量:" + nowStock);
+        log.info("商品id：{} ,用户id：{} 秒杀成功,数据库库存更新：{}", productId, userId, stock);
         // 添加到成功抢购名单
         jedis.sadd(productId, userId);
         log.info("商品：" + productId + " ，用户：" + userId + " ，添加到成功抢购名单");
-        // 发送交易记录到消息队列
-        recordService.sendRecordToMessageQueue(userId, productId, BuyResultEnum.SUCCESS.getValue());
-        log.info("商品：" + productId + " ，用户：" + userId + " ，发送交易记录到消息队列");
+//        // 发送交易记录到消息队列
+//        recordService.sendRecordToMessageQueue(userId, productId, BuyResultEnum.SUCCESS.getValue());
+//        log.info("商品：" + productId + " ，用户：" + userId + " ，发送交易记录到消息队列");
     }
 }
