@@ -69,7 +69,7 @@ CREATE TABLE `tb_record`(
 
  - #### 限流
 
-   利用zuul-ratelimit提供的令牌桶算法，在API网关层实现限流
+   利用guava-ratelimit提供的令牌桶算法，在API网关层做限流
 
 # 测试
 
@@ -109,5 +109,5 @@ CREATE TABLE `tb_record`(
   
 - #### 测试结果
 
-  99%以上请求被拦截在API网关层，平均响应实际在100ms以内。
+  99%以上请求被拦截在API网关层，平均响应实际在200ms以内。
   
