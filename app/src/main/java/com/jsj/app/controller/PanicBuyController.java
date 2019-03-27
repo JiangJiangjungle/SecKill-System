@@ -31,7 +31,7 @@ public class PanicBuyController {
      * @return
      */
     @PostMapping("/ByOptimisticLock")
-    public Message<?> handleByOptimisticLock(@RequestBody BuyInformation buyInformation) throws Exception{
+    public Message<?> handleByOptimisticLock(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
         BuyResultEnum result;
         // 参数判空
@@ -89,7 +89,7 @@ public class PanicBuyController {
      * @return
      */
     @PostMapping("/ByZookeeperLock")
-    public Message<?> handleByZookeeperLock(@RequestBody BuyInformation buyInformation)  throws Exception{
+    public Message<?> handleByZookeeperLock(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
         BuyResultEnum result;
         // 参数判空
