@@ -68,13 +68,13 @@ public class RedisDataUpater {
                 throw new RuntimeException("ERROR ## parser of eromanga-event has an error , data:" + entry.toString(),
                         e);
             }
-
             CanalEntry.EventType eventType = rowChage.getEventType();
             Header header = entry.getHeader();
             log.info("======>binlog[{}:{}] , name[{},{}] , eventType : {}", header.getLogfileName(),
                     header.getLogfileOffset(), header.getSchemaName(), header.getTableName(), eventType);
-            for (RowData rowData : rowChage.getRowDatasList()) {
-                if (eventType == EventType.UPDATE) {
+            //检查update记录
+            if (eventType == EventType.UPDATE) {
+                for (RowData rowData : rowChage.getRowDatasList()) {
                     List<Column> columns = rowData.getAfterColumnsList();
                     String productId = null;
                     String stock = null;

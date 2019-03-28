@@ -21,6 +21,8 @@
         <module>app</module>
         <module>eureka</module>
         <module>zuul</module>
+        <module>mq-consumer</module>
+        <module>canal-redis</module>
     </modules>
 
     <properties>

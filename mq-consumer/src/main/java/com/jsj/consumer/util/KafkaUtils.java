@@ -1,6 +1,4 @@
-package com.jsj.app.util;
-
-import java.util.concurrent.ExecutionException;
+package com.jsj.consumer.util;
 
 /**
  * kafka消息队列工具类
@@ -11,7 +9,7 @@ public interface KafkaUtils {
      *
      * @param message
      */
-    void send(Object message)throws Exception;
+    void send(Object message);
 
     /**
      * 接收消息

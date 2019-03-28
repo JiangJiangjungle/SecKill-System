@@ -7,6 +7,7 @@ import com.jsj.app.dao.RecordMapper;
 import com.jsj.app.exception.DAOException;
 import com.jsj.app.exception.ServiceException;
 import com.jsj.app.pojo.entity.RecordDO;
+import com.jsj.app.service.RecordService;
 import com.jsj.app.service.TestService;
 import com.jsj.app.util.JedisUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,8 @@ public class TestServiceImpl implements TestService, ApplicationContextAware {
     @Autowired
     private RedisConfig redisConfig;
 
+    @Autowired
+    private RecordService recordService;
     /**
      * 自己的代理对象
      */
@@ -47,40 +50,18 @@ public class TestServiceImpl implements TestService, ApplicationContextAware {
 
     @Transactional(rollbackFor = ServiceException.class)
     @Override
-    public BuyResultEnum handleWithoutRedis(String userId, String productId, int buyNumber) throws ServiceException {
-        try {
-            boolean updated = this.proxy.updateAndInsertRecord(userId, productId, true);
-            // 若更新成功，则同时更新缓存并异步发送消息
-            if (updated) {
-                return BuyResultEnum.SUCCESS;
-            } else {
-                log.info("库存不足，秒杀失败..userId: " + userId);
-                return BuyResultEnum.FAIL;
-            }
-        } catch (DAOException d) {
-            throw new ServiceException("DAOException导致");
-        }
-    }
-
-    @Transactional(rollbackFor = ServiceException.class)
-    @Override
-    public BuyResultEnum handleWithoutRedis2(String userId, String productId, int buyNumber) throws ServiceException {
-        try {
-            boolean updated = this.proxy.updateAndInsertRecord(userId, productId, false);
-            // 若更新成功，则同时更新缓存并异步发送消息
-            if (updated) {
-                return BuyResultEnum.SUCCESS;
-            } else {
-                log.info("库存不足，秒杀失败..userId: " + userId);
-                return BuyResultEnum.FAIL;
-            }
-        } catch (DAOException d) {
-            throw new ServiceException("DAOException导致");
+    public BuyResultEnum handleWithoutRedis(String userId, String productId, int buyNumber, boolean optimisticLock) throws ServiceException {
+        boolean updated = this.proxy.updateAndInsertRecord(userId, productId, optimisticLock);
+        if (updated) {
+            return BuyResultEnum.SUCCESS;
+        } else {
+            log.info("库存不足，秒杀失败..userId: " + userId);
+            return BuyResultEnum.FAIL;
         }
     }
 
     @Override
-    public BuyResultEnum handleByOptimisticLockAndRedisWithOutTranscation(String userId, String productId, int buyNumber) throws ServiceException {
+    public BuyResultEnum handleByRedis(String userId, String productId, int buyNumber, boolean optimisticLock) throws ServiceException {
         Jedis jedis = null;
         try {
             // 检查成功抢购名单中是否包含该用户
@@ -94,7 +75,7 @@ public class TestServiceImpl implements TestService, ApplicationContextAware {
             boolean updated = false;
             if (stock > 0) {
                 // 乐观锁更新数据库中的库存数量并新增交易记录
-                updated = this.proxy.updateAndInsertRecord(userId, productId, true);
+                updated = this.proxy.updateAndInsertRecord(userId, productId, optimisticLock);
             }
             // 若更新成功，则同时更新缓存
             if (updated) {
@@ -104,15 +85,13 @@ public class TestServiceImpl implements TestService, ApplicationContextAware {
             }
             log.info("乐观加锁失败或库存不足，秒杀失败..userId: " + userId);
             return BuyResultEnum.FAIL;
-        } catch (DAOException d) {
-            throw new ServiceException("DAOException导致");
         } finally {
             jedisUtils.release(jedis);
         }
     }
 
     @Override
-    public BuyResultEnum handleByPessmisticLockAndRedisWithOutTranscation(String userId, String productId, int buyNumber) throws ServiceException {
+    public BuyResultEnum handleByRedisAndKafka(String userId, String productId, int buyNumber, boolean optimisticLock) throws ServiceException {
         Jedis jedis = null;
         try {
             // 检查成功抢购名单中是否包含该用户
@@ -126,59 +105,67 @@ public class TestServiceImpl implements TestService, ApplicationContextAware {
             boolean updated = false;
             if (stock > 0) {
                 // 乐观锁更新数据库中的库存数量并新增交易记录
-                updated = this.proxy.updateAndInsertRecord(userId, productId, false);
+                updated = this.proxy.updateAndSendMessage(userId, productId, optimisticLock);
             }
-            // 若更新成功，则同时更新抢购名单
+            // 若更新成功，则同时更新缓存
             if (updated) {
+                log.info("商品id：{} ,用户id：{} 秒杀成功,数据库库存更新：{}", productId, userId, stock);
                 this.updateUserList(userId, productId, jedis);
                 return BuyResultEnum.SUCCESS;
             }
-            log.info("库存不足，秒杀失败..userId: " + userId);
+            log.info("乐观加锁失败或库存不足，秒杀失败..userId: " + userId);
             return BuyResultEnum.FAIL;
-        } catch (DAOException d) {
-            throw new ServiceException("DAOException导致");
         } finally {
             jedisUtils.release(jedis);
         }
     }
 
     @Override
-    @Transactional(rollbackFor = DAOException.class)
-    public boolean updateAndInsertRecord(String userId, String productId, boolean optimisticLock) throws DAOException {
+    @Transactional(rollbackFor = ServiceException.class)
+    public boolean updateAndInsertRecord(String userId, String productId, boolean optimisticLock) throws ServiceException {
         boolean updated;
-        if (optimisticLock) {
-            Integer versionId = productMapper.getVersionId(productId);
-            updated = productMapper.updateStockByLock(productId, versionId);
-        } else {
-            updated = productMapper.updateStock(productId);
-        }
-        if (updated) {
-            RecordDO recordDO = new RecordDO(userId, productId, BuyResultEnum.SUCCESS.getValue(), new Date());
-            recordMapper.addRecord(recordDO);
+        try {
+            if (optimisticLock) {
+                Integer versionId = productMapper.getVersionId(productId);
+                updated = productMapper.updateStockByLock(productId, versionId);
+            } else {
+                updated = productMapper.updateStock(productId);
+            }
+            if (updated) {
+                RecordDO recordDO = new RecordDO(userId, productId, BuyResultEnum.SUCCESS.getValue(), new Date());
+                recordMapper.addRecord(recordDO);
+            }
+        } catch (DAOException d) {
+            throw new ServiceException(d.getMessage());
         }
         return updated;
     }
 
-
-    @Transactional(rollbackFor = DAOException.class)
-    public boolean updateAndSendMessage(String userId, String productId, boolean optimisticLock) throws DAOException {
+    @Override
+    @Transactional(rollbackFor = ServiceException.class)
+    public boolean updateAndSendMessage(String userId, String productId, boolean optimisticLock) throws ServiceException {
         boolean updated;
-        if (optimisticLock) {
-            Integer versionId = productMapper.getVersionId(productId);
-            updated = productMapper.updateStockByLock(productId, versionId);
-        } else {
-            updated = productMapper.updateStock(productId);
+        try {
+            if (optimisticLock) {
+                Integer versionId = productMapper.getVersionId(productId);
+                updated = productMapper.updateStockByLock(productId, versionId);
+            } else {
+                updated = productMapper.updateStock(productId);
+            }
+        } catch (DAOException d) {
+            throw new ServiceException(d.getMessage());
         }
         if (updated) {
-            RecordDO recordDO = new RecordDO(userId, productId, BuyResultEnum.SUCCESS.getValue(), new Date());
-            recordMapper.addRecord(recordDO);
+            // 发送交易记录到消息队列
+            recordService.sendRecordToMessageQueue(userId, productId, BuyResultEnum.SUCCESS.getValue());
+            log.info("商品：" + productId + " ，用户：" + userId + " ，发送交易记录到消息队列");
         }
         return updated;
     }
 
 
     /**
-     * 添加到成功抢购名单
+     * 添加到抢购名单
      *
      * @param userId
      * @param productId
