@@ -63,12 +63,12 @@ CREATE TABLE `tb_record`(
    提供3种加锁方案
  
    - ***MySQL乐观锁***
-   - ***Redis锁***
-   - ***ZooKeeper锁***
+   - ***Redis分布式锁***
+   - ***ZooKeeper分布式锁***
 
  - #### 异步通信
 
-   利用Kafka实现交易记录的生产和异步消费
+   在一个事务内：商品库存扣减成功后，利用Kafka实现交易记录的生产和异步消费
 
  - #### 限流
 
@@ -82,35 +82,27 @@ CREATE TABLE `tb_record`(
   
   ![test_config](https://github.com/JiangJiangjungle/SecKill-System/blob/master/figures/test_config.png)
 
-- #### 数据库部署
+- #### 部署
 
-  阿里云ECS，利用docker简单部署
+  MySQL: docker单点部署
   
-- #### redis部署
-
-  阿里云ECS，利用docker简单部署
-
-- #### zookeeper部署
-
-  阿里云ECS，利用docker简单部署,节点数：1
- 
-- #### kafka部署
-
-  阿里云ECS，利用docker简单部署,节点数：1
+  Redis: docker单点部署
   
-- #### Eureka部署
-
-  本地启动
+  Zookeeper: docker单点部署
   
-- #### Spring-Zuul部署
-
-  本地启动，令牌发放速率200个/s
+  Kafka: docker单点部署
   
-- #### 应用部署
-
-  本地启动
+  Canal-server: docker单点部署
+  
+  eureka: 本地启动
+  
+  zuul: 本地启动，令牌发放速率200个/s
+  
+  canal-redis: 本地启动
+  
+  app: 本地启动
   
 - #### 测试结果
 
-  99%以上请求被拦截在API网关层，平均响应实际在200ms以内。
+  开启限流情况下，99%以上请求被拦截在API网关层，平均响应实际在200ms以内。
   
