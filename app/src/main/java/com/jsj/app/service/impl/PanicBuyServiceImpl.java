@@ -1,12 +1,11 @@
 package com.jsj.app.service.impl;
 
-import com.jsj.app.config.RedisConfig;
-import com.jsj.app.config.ZooKeeperConfig;
-import com.jsj.app.constant.BuyResultEnum;
+import com.jsj.app.common.RedisConfig;
+import com.jsj.app.common.ZooKeeperConfig;
+import com.jsj.app.common.BuyResultEnum;
 import com.jsj.app.dao.ProductMapper;
 import com.jsj.app.exception.DAOException;
 import com.jsj.app.exception.ServiceException;
-import com.jsj.app.lock.impl.RedisLock;
 import com.jsj.app.lock.impl.ZookeeperLock;
 import com.jsj.app.pojo.entity.ProductDO;
 import com.jsj.app.service.PanicBuyService;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 
-import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 
 /**

@@ -1,6 +1,6 @@
 package com.jsj.app.service;
 
-import com.jsj.app.constant.BuyResultEnum;
+import com.jsj.app.common.BuyResultEnum;
 import com.jsj.app.exception.ServiceException;
 
 public interface PanicBuyService {

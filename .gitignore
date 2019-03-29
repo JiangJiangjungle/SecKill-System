@@ -11,6 +11,6 @@
 *.tar.gz
 *.rar
 
-# config Files
+# common Files
 .idea
 *.iml

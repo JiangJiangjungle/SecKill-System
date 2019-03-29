@@ -1,6 +1,6 @@
-package com.jsj.app.controller;
+package com.jsj.app.web;
 
-import com.jsj.app.constant.BuyResultEnum;
+import com.jsj.app.common.BuyResultEnum;
 import com.jsj.app.pojo.vo.BuyInformation;
 import com.jsj.app.pojo.vo.Message;
 import com.jsj.app.service.TestService;

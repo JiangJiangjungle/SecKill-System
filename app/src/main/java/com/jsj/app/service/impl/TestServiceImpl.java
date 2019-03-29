@@ -1,8 +1,8 @@
 package com.jsj.app.service.impl;
 
-import com.jsj.app.config.RedisConfig;
-import com.jsj.app.config.ZooKeeperConfig;
-import com.jsj.app.constant.BuyResultEnum;
+import com.jsj.app.common.RedisConfig;
+import com.jsj.app.common.ZooKeeperConfig;
+import com.jsj.app.common.BuyResultEnum;
 import com.jsj.app.dao.ProductMapper;
 import com.jsj.app.dao.RecordMapper;
 import com.jsj.app.exception.DAOException;

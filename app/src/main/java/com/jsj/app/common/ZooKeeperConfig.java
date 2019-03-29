@@ -1,4 +1,4 @@
-package com.jsj.app.config;
+package com.jsj.app.common;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

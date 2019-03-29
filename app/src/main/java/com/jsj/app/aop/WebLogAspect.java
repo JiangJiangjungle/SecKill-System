@@ -1,7 +1,7 @@
 package com.jsj.app.aop;
 
 import com.alibaba.fastjson.JSON;
-import com.jsj.app.constant.BuyResultEnum;
+import com.jsj.app.common.BuyResultEnum;
 import com.jsj.app.pojo.vo.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -26,7 +26,7 @@ import java.util.Arrays;
 @Slf4j
 public class WebLogAspect {
 
-    @Pointcut("execution(public * com.jsj.app.controller.*.*(..))")
+    @Pointcut("execution(public * com.jsj.app.web.*.*(..))")
     public void controller() {
     }
 
