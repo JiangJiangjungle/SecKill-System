@@ -20,12 +20,14 @@ public class TestController {
     @PostMapping("/0")
     public Message<?> test(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
+        BuyResultEnum result;
         // 获取userId
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        message.setStatusCode(BuyResultEnum.SUCCESS.getValue());
-        message.setStatusMessage(BuyResultEnum.SUCCESS.getLabel());
+        result = testService.test(userId, productId, 1, false);
+        message.setStatusCode(result.getValue());
+        message.setStatusMessage(result.getLabel());
         // 返回结果
         return message;
     }
@@ -120,4 +122,33 @@ public class TestController {
         return message;
     }
 
+    @PostMapping("/7")
+    public Message<?> test7(@RequestBody BuyInformation buyInformation) throws Exception {
+        Message<Object> message = new Message<>();
+        BuyResultEnum result;
+        // 获取userId
+        String userId = buyInformation.getUserId();
+        // 获取商品id
+        String productId = buyInformation.getProductId();
+        result = testService.handleByRedisAndKafkaAndDistributedLock(userId, productId, 1, false, true);
+        message.setStatusCode(result.getValue());
+        message.setStatusMessage(result.getLabel());
+        // 返回结果
+        return message;
+    }
+
+    @PostMapping("/8")
+    public Message<?> test8(@RequestBody BuyInformation buyInformation) throws Exception {
+        Message<Object> message = new Message<>();
+        BuyResultEnum result;
+        // 获取userId
+        String userId = buyInformation.getUserId();
+        // 获取商品id
+        String productId = buyInformation.getProductId();
+        result = testService.handleByRedisAndKafkaAndDistributedLock(userId, productId, 1, false, false);
+        message.setStatusCode(result.getValue());
+        message.setStatusMessage(result.getLabel());
+        // 返回结果
+        return message;
+    }
 }

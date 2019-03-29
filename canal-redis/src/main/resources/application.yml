@@ -1,7 +1,13 @@
-
 spring:
   application:
     name: canal-redis
+  #数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://119.23.204.78:3306/sec_kill?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
   #redis缓存
   redis:
     database: 0
@@ -16,6 +22,11 @@ spring:
         #连接池中的最小空闲连接
         min-idle: 1
     timeout: 3000
+
+#mybatis
+mybatis:
+  mapper-locations: classpath:dao/*.xml
+  type-aliases-package: com.jsj.app.pojo.entity
 
 #canal-server配置信息
 canal-server:

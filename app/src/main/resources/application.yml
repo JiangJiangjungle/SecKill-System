@@ -19,11 +19,11 @@ spring:
     jedis:
       pool:
         #连接池最大连接数
-        max-active: 1000
+        max-active: 2000
         #连接池中的最大空闲连接
-        max-idle: 100
+        max-idle: 200
         #连接池中的最小空闲连接
-        min-idle: 100
+        min-idle: 5
     timeout: 3000
   #kafka
   kafka:

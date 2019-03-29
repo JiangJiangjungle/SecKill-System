@@ -19,7 +19,7 @@ public class RedisLock extends AbstractLock {
     /**
      * 用于获取缓存连接
      */
-    private JedisUtils jedisUtils;
+    private Jedis jedis;
     /**
      * 锁key值
      */
@@ -34,9 +34,9 @@ public class RedisLock extends AbstractLock {
     private volatile boolean locked = false;
 
     /**
-     * 锁超时时间，防止线程在入锁以后，无限的执行等待，默认30000ms
+     * 锁超时时间，防止线程在入锁以后，无限的执行等待，默认1000ms
      */
-    private static final long EXPIRE_MILLISECOND = 3000;
+    private static final long EXPIRE_MILLISECOND = 1000;
 
     /**
      * 设置键的过期时间为 millisecond 毫秒
@@ -50,31 +50,27 @@ public class RedisLock extends AbstractLock {
 
     private static final String OK = "OK";
 
-    public RedisLock(String lockKey, String lockValue, JedisUtils jedisUtils) {
+    public RedisLock(String lockKey, String lockValue, Jedis jedis) {
         this.lockKey = lockKey;
         this.lockValue = lockValue;
-        this.jedisUtils = jedisUtils;
+        this.jedis = jedis;
     }
 
     @Override
     public boolean tryLock() {
-        Jedis jedis = jedisUtils.getJedis();
         String result = jedis.set(lockKey, lockValue, NX, PX, EXPIRE_MILLISECOND);
         if (OK.equals(result)) {
             locked = true;
         }
-        jedisUtils.release(jedis);
         return locked;
     }
 
     @Override
     public void unlock() {
-        Jedis jedis = jedisUtils.getJedis();
         if (locked && this.lockValue.equals(jedis.get(lockKey))) {
             jedis.del(lockKey);
         }
         locked = false;
-        jedisUtils.release(jedis);
     }
 
     @Override

@@ -37,8 +37,8 @@ public class KafkaUtilsImpl implements KafkaUtils {
     public void send(Object message) throws Exception {
         String content = JSON.toJSONString(message);
         ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(TOPIC, content);
-        future.get();
-        log.info("+++++++++++++++++++++  message = {}", content);
+        SendResult<String, String> result = future.get();
+        log.info("+++++++++++++++++++++  发送消息 = {}", result.getProducerRecord());
     }
 
     @Override
@@ -47,20 +47,20 @@ public class KafkaUtilsImpl implements KafkaUtils {
     }
 
 
-//    @KafkaListener(topics = {TOPIC})
-//    public void listen(ConsumerRecord<?, ?> record) {
-//        Optional<?> kafkaMessage = Optional.ofNullable(record.value());
-//        if (kafkaMessage.isPresent()) {
-//            Object message = kafkaMessage.get();
-//            log.info("获取消息record :" + record);
-//            RecordDO recordDO = JSON.parseObject((String) message, new TypeReference<RecordDO>() {
-//            });
-//            try {
-//                recordMapper.addRecord(recordDO);
-//            } catch (DAOException d) {
-//                log.info("新增交易记录失败");
-//            }
-//            log.info("新增交易记录 :" + recordDO);
-//        }
-//    }
+    @KafkaListener(topics = {TOPIC})
+    public void listen(ConsumerRecord<?, ?> record) {
+        Optional<?> kafkaMessage = Optional.ofNullable(record.value());
+        if (kafkaMessage.isPresent()) {
+            Object message = kafkaMessage.get();
+            log.info("拉取消息:" + record);
+            RecordDO recordDO = JSON.parseObject((String) message, new TypeReference<RecordDO>() {
+            });
+            try {
+                recordMapper.addRecord(recordDO);
+                log.info("数据库新增交易记录 :" + recordDO.toString());
+            } catch (DAOException d) {
+                log.info("数据库插入交易记录失败");
+            }
+        }
+    }
 }
