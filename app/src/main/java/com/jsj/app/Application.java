@@ -31,6 +31,6 @@ public class Application {
      */
     @GetMapping("/info")
     public String hello() {
-        return "panic-buy project!";
+        return "sec-kill project!";
     }
 }

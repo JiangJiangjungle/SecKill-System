@@ -17,6 +17,12 @@ public class TestController {
     @Autowired
     private SecKillService secKillService;
 
+    /**
+     * 数据库的乐观锁模式
+     * @param buyInformation
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/1")
     public Message<?> test1(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
@@ -32,6 +38,12 @@ public class TestController {
         return message;
     }
 
+    /**
+     * 数据库的悲观锁模式
+     * @param buyInformation
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/2")
     public Message<?> test2(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
@@ -47,6 +59,12 @@ public class TestController {
         return message;
     }
 
+    /**
+     * redis+数据库的乐观锁模式
+     * @param buyInformation
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/3")
     public Message<?> test3(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
@@ -62,6 +80,12 @@ public class TestController {
         return message;
     }
 
+    /**
+     * redis+数据库的悲观锁模式
+     * @param buyInformation
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/4")
     public Message<?> test4(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
@@ -77,6 +101,12 @@ public class TestController {
         return message;
     }
 
+    /**
+     * redis+数据库的乐观锁模式+Kafka
+     * @param buyInformation
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/5")
     public Message<?> test5(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
@@ -92,6 +122,12 @@ public class TestController {
         return message;
     }
 
+    /**
+     * redis+数据库的悲观锁模式+Kafka
+     * @param buyInformation
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/6")
     public Message<?> test6(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
@@ -107,6 +143,12 @@ public class TestController {
         return message;
     }
 
+    /**
+     * redis+redis分布式锁+数据库的悲观锁模式+Kafka
+     * @param buyInformation
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/7")
     public Message<?> test7(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
@@ -122,6 +164,12 @@ public class TestController {
         return message;
     }
 
+    /**
+     * redis+zookeeper分布式锁+数据库的悲观锁模式+Kafka
+     * @param buyInformation
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/8")
     public Message<?> test8(@RequestBody BuyInformation buyInformation) throws Exception {
         Message<Object> message = new Message<>();
