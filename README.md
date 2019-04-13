@@ -80,7 +80,7 @@ CREATE TABLE `tb_record`(
 
   Jmeter-5.0
   
-  ![test_config](https://github.com/JiangJiangjungle/SecKill-System/blob/master/figures/test_config.png)
+  ![test_config](https://github.com/JiangJiangjungle/SecKill-System/blob/master/data_figure/test_config.png)
 
 - #### 部署
 
