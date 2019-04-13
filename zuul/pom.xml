@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>com.jsj</groupId>
-        <artifactId>panic-buy</artifactId>
+        <artifactId>sec-kill</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>zuul</artifactId>
     <name>zuul</name>
-    <version>${panic-buy.version}</version>
+    <version>${sec-kill.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>

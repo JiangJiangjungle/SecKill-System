@@ -37,7 +37,7 @@ CREATE TABLE `tb_product` (
 
 DROP TABLE IF EXISTS tb_record;
 CREATE TABLE `tb_record`(
-    `id` int(32) not null AUTO_INCREMENT comment 'ID',
+    `id` int(64) not null AUTO_INCREMENT comment 'ID',
     `user_id` int(32) not null comment '用户ID',
     `product_id` int(32) not null comment '产品ID',
     `state` tinyint(3) not null comment '秒杀状态: 1秒杀成功,0秒杀失败,-1重复秒杀,-2系统异常',
@@ -46,7 +46,6 @@ CREATE TABLE `tb_record`(
     key key_product_id(`product_id`),
     key key_user_id_product_id (`user_id`,`product_id`)
 )ENGINE=InnoDB default charset='utf8';
-
 
 # 主要特性
 
@@ -68,7 +67,8 @@ CREATE TABLE `tb_record`(
 
  - #### 异步通信
 
-   在一个事务内：商品库存扣减成功后，利用Kafka实现交易记录的生产和异步消费
+   在一个事务内：商品库存扣减成功后，利用Kafka发送实现交易记录；
+   消费端通过Kafka实现异步消费；
 
  - #### 限流
 
@@ -105,4 +105,4 @@ CREATE TABLE `tb_record`(
 - #### 测试结果
 
   开启限流情况下，99%以上请求被拦截在API网关层，平均响应实际在200ms以内。
-  
+

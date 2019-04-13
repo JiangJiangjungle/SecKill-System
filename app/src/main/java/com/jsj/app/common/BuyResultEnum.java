@@ -1,4 +1,4 @@
-package com.jsj.app.constant;
+package com.jsj.app.common;
 
 /**
  * 用于返回秒杀结果

@@ -39,7 +39,11 @@ public class RecordServiceImpl implements RecordService {
         recordDO.setProductId(productId);
         recordDO.setState(state);
         recordDO.setUserId(userId);
-        kafkaUtils.send(recordDO);
+        try {
+            kafkaUtils.send(recordDO);
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     @Override

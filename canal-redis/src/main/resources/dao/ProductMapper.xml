@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jsj.canal.dao.ProductMapper">
+
+    <resultMap id="myProduct" type="com.jsj.app.pojo.entity.ProductDO">
+        <!--
+        column:表里面指定的列
+        property：对应的javaBean属性
+        如果不指定就自动封装，但仍然建议写上全部映射规则
+        -->
+        <id column="id" property="id"/>
+        <result column="stock" property="stock"/>
+        <result column="price" property="price"/>
+        <result column="product_name" property="productName"/>
+        <result column="version_id" property="versionId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="getProductById" resultMap="myProduct">
+        select id,stock,price,product_name,version_id,create_time from tb_product WHERE id=#{id}
+    </select>
+
+    <select id="getVersionId" resultType="java.lang.Integer">
+        select version_id from tb_product WHERE id=#{id}
+    </select>
+
+    <select id="getAllProducts" resultMap="myProduct">
+        select id,stock,price,product_name,version_id,create_time from tb_product
+        limit #{start},#{end}
+    </select>
+
+    <select id="getAllStock" resultMap="myProduct">
+        select id,stock from tb_product
+        limit #{start},#{end}
+    </select>
+
+    <select id="getStockById" resultType="java.lang.Integer">
+        select stock from tb_product WHERE id=#{id}
+    </select>
+
+    <insert id="addProduct" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_product(id,product_name, price, stock)
+        values(#{id},#{productName}, #{price}, #{stock})
+    </insert>
+
+    <insert id="updateStock">
+        UPDATE tb_product SET stock = stock-1
+        WHERE id=#{id} and stock>0
+    </insert>
+
+    <insert id="updateStockByLock">
+        UPDATE tb_product SET stock = stock-1,version_id=#{versionId}+1
+        WHERE id=#{id} AND version_id=#{versionId} and stock>0
+    </insert>
+
+</mapper>

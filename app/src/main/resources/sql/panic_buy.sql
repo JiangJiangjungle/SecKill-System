@@ -23,8 +23,8 @@ CREATE TABLE `tb_product` (
 DROP TABLE IF EXISTS tb_record;
 CREATE TABLE `tb_record`(
     `id` int(32) not null AUTO_INCREMENT comment 'ID',
-    `user_id` int(32) unique not null comment '用户ID',
-    `product_id` int(32) unique not null comment '产品ID',
+    `user_id` int(32) not null comment '用户ID',
+    `product_id` int(32) not null comment '产品ID',
     `state` tinyint(3) not null comment '秒杀状态: 1秒杀成功,0秒杀失败,-1重复秒杀,-2系统异常',
     `create_time` datetime not null default now() comment '创建时间',
     primary key (`id`),
