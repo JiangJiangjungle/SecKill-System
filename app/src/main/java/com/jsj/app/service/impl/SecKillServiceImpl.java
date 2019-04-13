@@ -11,7 +11,7 @@ import com.jsj.app.lock.impl.RedisLock;
 import com.jsj.app.lock.impl.ZookeeperLock;
 import com.jsj.app.pojo.entity.RecordDO;
 import com.jsj.app.service.RecordService;
-import com.jsj.app.service.TestService;
+import com.jsj.app.service.SecKillService;
 import com.jsj.app.util.JedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +28,7 @@ import java.util.concurrent.locks.Lock;
 
 @Slf4j
 @Service
-public class TestServiceImpl implements TestService, ApplicationContextAware {
+public class SecKillServiceImpl implements SecKillService, ApplicationContextAware {
 
     @Autowired
     private JedisUtils jedisUtils;
@@ -46,11 +46,11 @@ public class TestServiceImpl implements TestService, ApplicationContextAware {
     /**
      * 自己的代理对象
      */
-    private TestService proxy;
+    private SecKillService proxy;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.proxy = applicationContext.getBean(TestService.class);
+        this.proxy = applicationContext.getBean(SecKillService.class);
     }
 
     @Transactional(rollbackFor = ServiceException.class)
@@ -233,42 +233,5 @@ public class TestServiceImpl implements TestService, ApplicationContextAware {
     private int chechStockByRedis(String productId, Jedis jedis) {
         String stockString = jedis.hget(redisConfig.getStockHashKey(), productId);
         return StringUtils.isEmpty(stockString) ? 0 : Integer.parseInt(stockString);
-    }
-
-
-    @Override
-    public BuyResultEnum test(String userId, String productId, int buyNumber, boolean optimisticLock) throws ServiceException {
-        Jedis jedis = null;
-        try {
-            // 检查成功抢购名单中是否包含该用户
-            jedis = jedisUtils.getJedis();
-            if (jedis.sismember(productId, userId)) {
-                // 返回重复秒杀信息
-                return BuyResultEnum.REPEAT;
-            }
-            // 查询缓存中的库存数量
-            int stock = chechStockByRedis(productId, jedis);
-            boolean updated = false;
-            if (stock > 0) {
-                // 乐观锁更新数据库中的库存数量并新增交易记录
-                updated = this.proxy.updateAndSendMessage(userId, productId, optimisticLock);
-                stock = productMapper.getStockById(productId);
-                // 更新缓存中的库存数量
-                jedis.hset(redisConfig.getStockHashKey(), productId, String.valueOf(stock));
-            }
-            log.info("商品id：{} ,redis的库存更新：{}", productId, stock);
-            // 若更新成功，则同时更新缓存
-            if (updated) {
-                log.info("商品id：{} ,用户id：{} 秒杀成功,数据库库存更新：{}", productId, userId, stock);
-                this.updateUserList(userId, productId, jedis);
-                return BuyResultEnum.SUCCESS;
-            }
-            log.info("乐观加锁失败或库存不足，秒杀失败..userId: " + userId);
-            return BuyResultEnum.FAIL;
-        } catch (DAOException d) {
-            throw new ServiceException(d.getMessage());
-        } finally {
-            jedisUtils.release(jedis);
-        }
     }
 }

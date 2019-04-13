@@ -75,6 +75,12 @@ public class RedisDataUpater {
         }
     }
 
+    /**
+     * 缓存数据预加载
+     *
+     * @param jedis
+     * @throws DAOException
+     */
     private void preLoadData(Jedis jedis) throws DAOException {
         int count = 0;
         //刷新缓存

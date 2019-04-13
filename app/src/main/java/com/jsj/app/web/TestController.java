@@ -3,7 +3,7 @@ package com.jsj.app.web;
 import com.jsj.app.common.BuyResultEnum;
 import com.jsj.app.pojo.vo.BuyInformation;
 import com.jsj.app.pojo.vo.Message;
-import com.jsj.app.service.TestService;
+import com.jsj.app.service.SecKillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,22 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @Autowired
-    private TestService testService;
-
-    @PostMapping("/0")
-    public Message<?> test(@RequestBody BuyInformation buyInformation) throws Exception {
-        Message<Object> message = new Message<>();
-        BuyResultEnum result;
-        // 获取userId
-        String userId = buyInformation.getUserId();
-        // 获取商品id
-        String productId = buyInformation.getProductId();
-        result = testService.test(userId, productId, 1, false);
-        message.setStatusCode(result.getValue());
-        message.setStatusMessage(result.getLabel());
-        // 返回结果
-        return message;
-    }
+    private SecKillService secKillService;
 
     @PostMapping("/1")
     public Message<?> test1(@RequestBody BuyInformation buyInformation) throws Exception {
@@ -40,7 +25,7 @@ public class TestController {
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        result = testService.handleWithoutRedis(userId, productId, 1, true);
+        result = secKillService.handleWithoutRedis(userId, productId, 1, true);
         message.setStatusCode(result.getValue());
         message.setStatusMessage(result.getLabel());
         // 返回结果
@@ -55,7 +40,7 @@ public class TestController {
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        result = testService.handleWithoutRedis(userId, productId, 1, false);
+        result = secKillService.handleWithoutRedis(userId, productId, 1, false);
         message.setStatusCode(result.getValue());
         message.setStatusMessage(result.getLabel());
         // 返回结果
@@ -70,7 +55,7 @@ public class TestController {
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        result = testService.handleByRedis(userId, productId, 1, true);
+        result = secKillService.handleByRedis(userId, productId, 1, true);
         message.setStatusCode(result.getValue());
         message.setStatusMessage(result.getLabel());
         // 返回结果
@@ -85,7 +70,7 @@ public class TestController {
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        result = testService.handleByRedis(userId, productId, 1, false);
+        result = secKillService.handleByRedis(userId, productId, 1, false);
         message.setStatusCode(result.getValue());
         message.setStatusMessage(result.getLabel());
         // 返回结果
@@ -100,7 +85,7 @@ public class TestController {
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        result = testService.handleByRedisAndKafka(userId, productId, 1, true);
+        result = secKillService.handleByRedisAndKafka(userId, productId, 1, true);
         message.setStatusCode(result.getValue());
         message.setStatusMessage(result.getLabel());
         // 返回结果
@@ -115,7 +100,7 @@ public class TestController {
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        result = testService.handleByRedisAndKafka(userId, productId, 1, false);
+        result = secKillService.handleByRedisAndKafka(userId, productId, 1, false);
         message.setStatusCode(result.getValue());
         message.setStatusMessage(result.getLabel());
         // 返回结果
@@ -130,7 +115,7 @@ public class TestController {
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        result = testService.handleByRedisAndKafkaAndDistributedLock(userId, productId, 1, false, true);
+        result = secKillService.handleByRedisAndKafkaAndDistributedLock(userId, productId, 1, false, true);
         message.setStatusCode(result.getValue());
         message.setStatusMessage(result.getLabel());
         // 返回结果
@@ -145,7 +130,7 @@ public class TestController {
         String userId = buyInformation.getUserId();
         // 获取商品id
         String productId = buyInformation.getProductId();
-        result = testService.handleByRedisAndKafkaAndDistributedLock(userId, productId, 1, false, false);
+        result = secKillService.handleByRedisAndKafkaAndDistributedLock(userId, productId, 1, false, false);
         message.setStatusCode(result.getValue());
         message.setStatusMessage(result.getLabel());
         // 返回结果
