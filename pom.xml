@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jsj</groupId>
-    <artifactId>panic-buy</artifactId>
+    <artifactId>sec-kill</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>panic-buy</name>
-    <description>Panic-Buy Project</description>
+    <name>sec-kill</name>
+    <description>Sec-Kill Project</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
