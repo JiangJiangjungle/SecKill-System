@@ -13,6 +13,8 @@
  
 # SQL
 
+use sec_kill;
+
 DROP TABLE IF EXISTS tb_user;
 CREATE TABLE `tb_user`(
     `id` int(32) not null AUTO_INCREMENT comment 'ID',
@@ -35,7 +37,7 @@ CREATE TABLE `tb_product` (
 
 DROP TABLE IF EXISTS tb_record;
 CREATE TABLE `tb_record`(
-    `id` int(64) not null AUTO_INCREMENT comment 'ID',
+    `id` int(32) not null AUTO_INCREMENT comment 'ID',
     `user_id` int(32) not null comment '用户ID',
     `product_id` int(32) not null comment '产品ID',
     `state` tinyint(3) not null comment '秒杀状态: 1秒杀成功,0秒杀失败,-1重复秒杀,-2系统异常',
@@ -45,27 +47,33 @@ CREATE TABLE `tb_record`(
     key key_user_id_product_id (`user_id`,`product_id`)
 )ENGINE=InnoDB default charset='utf8';
 
+
 # 主要特性
 
  - #### 缓存查询
 
    预加载商品库存到Redis缓存，提高查询速率
 
- - #### 数据一致性
+- #### 双写一致性
 
-   提供3种加锁方案,并且在一个事务中：MySQL商品库存更新后，立即更新缓存中的库存
+   利用canal对数据库进行binlog监听，更新redis
+
+ - #### 锁机制
+
+   提供3种加锁方案
  
    - ***MySQL乐观锁***
-   - ***Redis锁***
-   - ***ZooKeeper锁***
+   - ***Redis分布式锁***
+   - ***ZooKeeper分布式锁***
 
  - #### 异步通信
 
-   利用Kafka实现交易记录的生产和异步消费，降低请求响应时间
+   在一个事务内：商品库存扣减成功后，利用Kafka发送实现交易记录；
+   消费端通过Kafka实现异步消费；
 
  - #### 限流
 
-   利用zuul-ratelimit提供的令牌桶算法，在API网关层实现限流
+   利用guava-ratelimit提供的令牌桶算法，在API网关层做限流
 
 # 测试
 
@@ -75,35 +83,27 @@ CREATE TABLE `tb_record`(
   
   ![test_config](https://github.com/JiangJiangjungle/SecKill-System/blob/master/figures/test_config.png)
 
-- #### 数据库部署
+- #### 部署
 
-  阿里云ECS，利用docker简单部署
+  MySQL: docker单点部署
   
-- #### redis部署
-
-  阿里云ECS，利用docker简单部署
-
-- #### zookeeper部署
-
-  阿里云ECS，利用docker简单部署,节点数：1
- 
-- #### kafka部署
-
-  阿里云ECS，利用docker简单部署,节点数：1
+  Redis: docker单点部署
   
-- #### Eureka部署
-
-  本地启动
+  Zookeeper: docker单点部署
   
-- #### Spring-Zuul部署
-
-  本地启动，令牌发放速率100个/s
+  Kafka: docker单点部署
   
-- #### 应用部署
-
-  本地启动
+  Canal-server: docker单点部署
+  
+  eureka: 本地启动
+  
+  zuul: 本地启动，令牌发放速率200个/s
+  
+  canal-redis: 本地启动
+  
+  app: 本地启动
   
 - #### 测试结果
 
-  99%以上请求被拦截在API网关层，平均响应实际在100ms以内。
-  
+  开启限流情况下，99%以上请求被拦截在API网关层，平均响应实际在200ms以内。
+
