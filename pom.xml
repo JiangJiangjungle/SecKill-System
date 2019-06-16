@@ -2,25 +2,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jsj</groupId>
-    <artifactId>sec-kill</artifactId>
+    <groupId>com.jsj.seckill-system</groupId>
+    <artifactId>parent</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <name>sec-kill</name>
+    <name>seckill-system</name>
     <description>Sec-Kill Project</description>
 
+    <!-- Springboot的parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.7.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.1.3.RELEASE</version>
     </parent>
 
     <modules>
-        <module>app</module>
-        <module>eureka</module>
-        <module>zuul</module>
+        <!-- API -->
+        <module>api</module>
+<!--        &lt;!&ndash; 网关层 &ndash;&gt;-->
+<!--        <module>gate-way</module>-->
+<!--        &lt;!&ndash; 服务协调中心 &ndash;&gt;-->
+<!--        <module>eureka</module>-->
+        <!-- 服务代理层 -->
+        <module>mq-layer</module>
+        <!-- 应用层 -->
+        <module>service</module>
+        <!-- binlog监听工具 -->
         <module>canal-redis</module>
     </modules>
 
@@ -28,10 +36,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Dalston.SR5</spring-cloud.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+        <service.version>1.0-SNAPSHOT</service.version>
+        <data-access.version>1.0-SNAPSHOT</data-access.version>
+        <api.version>1.0-SNAPSHOT</api.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <lombok.version>1.16.6</lombok.version>
         <slf4j-api.version>1.7.21</slf4j-api.version>
+        <dubbo.version>2.8.4</dubbo.version>
+        <zkclient.version>0.6</zkclient.version>
     </properties>
 
     <dependencies>
@@ -52,19 +65,25 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>
         </dependency>
+        <!-- DubboX相关 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version>
+        </dependency>
+        <!-- zookeeper 第三方操作工具类 -->
+        <dependency>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>${zkclient.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.54</version>
+        </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
