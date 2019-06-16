@@ -5,7 +5,7 @@
 
 <mapper namespace="com.jsj.canal.RecordMapper">
 
-    <resultMap id="myRecord" type="com.jsj.mq.RecordDO">
+    <resultMap id="myRecord" type="com.jsj.service.RecordDO">
         <id column="id" property="id"/>
         <result column="product_id" property="productId"/>
         <result column="user_id" property="userId"/>

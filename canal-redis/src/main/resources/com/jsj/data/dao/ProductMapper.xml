@@ -5,7 +5,7 @@
 
 <mapper namespace="com.jsj.canal.ProductMapper">
 
-    <resultMap id="myProduct" type="com.jsj.mq.ProductDO">
+    <resultMap id="myProduct" type="com.jsj.service.ProductDO">
         <!--
         column:表里面指定的列
         property：对应的javaBean属性

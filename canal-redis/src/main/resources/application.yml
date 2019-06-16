@@ -26,7 +26,7 @@ spring:
 #mybatis
 mybatis:
   mapper-locations: classpath:data.mappers/*.xml
-  type-aliases-package: com.jsj.mq.data.pojo.entity
+  type-aliases-package: com.jsj.service.data.pojo.entity
 
 #canal-server配置信息
 canal-server:

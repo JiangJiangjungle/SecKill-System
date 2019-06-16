@@ -8,5 +8,5 @@ package com.jsj.api.util;
 public interface CacheUtil<T> {
     T getResource();
 
-    void releaseResource();
+    void releaseResource(T t);
 }

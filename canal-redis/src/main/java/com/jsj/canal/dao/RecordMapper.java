@@ -1,7 +1,7 @@
 package com.jsj.canal.dao;
 
-import com.jsj.mq.exception.DAOException;
-import com.jsj.mq.pojo.entity.RecordDO;
+import com.jsj.service.exception.DAOException;
+import com.jsj.service.pojo.entity.RecordDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

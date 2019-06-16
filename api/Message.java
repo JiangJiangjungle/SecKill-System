@@ -1,4 +1,4 @@
-package com.jsj.mq.pojo.vo;
+package com.jsj.service.pojo.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

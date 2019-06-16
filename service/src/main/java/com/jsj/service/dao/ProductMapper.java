@@ -1,8 +1,7 @@
-package com.jsj.canal.dao;
+package com.jsj.service.dao;
 
-import com.jsj.service.exception.DAOException;
-import com.jsj.service.pojo.entity.ProductDO;
-import org.apache.ibatis.annotations.Param;
+import com.jsj.api.entity.ProductDO;
+import com.jsj.api.exception.DAOException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public interface ProductMapper {
      * @param id 商品id
      * @return
      */
-    boolean updateStock(@Param("id") String id) throws DAOException;
+    boolean decreaseStock(Long id) throws DAOException;
 
     /**
      * 利用乐观锁更新商品库存
@@ -38,7 +37,7 @@ public interface ProductMapper {
      * @return
      * @throws DAOException
      */
-    boolean updateStockByLock(@Param("id") String id, @Param("versionId") Integer versionId) throws DAOException;
+    boolean decreaseStockByVersionId(Long id, Integer versionId) throws DAOException;
 
     /**
      * 根据主键查找
@@ -46,7 +45,7 @@ public interface ProductMapper {
      * @param id 商品id
      * @return
      */
-    ProductDO getProductById(String id) throws DAOException;
+    ProductDO getProductByPrimaryId(Long id) throws DAOException;
 
     /**
      * 根据主键获取版本id
@@ -55,21 +54,21 @@ public interface ProductMapper {
      * @return
      * @throws DAOException
      */
-    Integer getVersionId(String id) throws DAOException;
+    Integer getVersionIdByPrimaryId(Long id) throws DAOException;
 
-    Integer getStockById(String id) throws DAOException;
+    Integer getStockByPrimaryId(Long id) throws DAOException;
 
     /**
      * 获取所有商品
      *
      * @return
      */
-    List<ProductDO> getAllProducts(@Param("start") int start, @Param("end") int end) throws DAOException;
+    List<ProductDO> getAllProducts(Integer start, Integer end) throws DAOException;
 
     /**
      * 获取所有商品库存
      *
      * @return
      */
-    List<ProductDO> getAllStock(@Param("start") int start, @Param("end") int end) throws DAOException;
+    List<ProductDO> getAllStocks(Integer start, Integer end) throws DAOException;
 }

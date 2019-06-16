@@ -20,15 +20,11 @@
     <modules>
         <!-- API -->
         <module>api</module>
-<!--        &lt;!&ndash; 网关层 &ndash;&gt;-->
-<!--        <module>gate-way</module>-->
-<!--        &lt;!&ndash; 服务协调中心 &ndash;&gt;-->
-<!--        <module>eureka</module>-->
         <!-- 服务代理层 -->
-        <module>mq-layer</module>
+        <module>mq-proxy</module>
         <!-- 应用层 -->
         <module>service</module>
-        <!-- binlog监听工具 -->
+        <!-- binlog监听 -->
         <module>canal-redis</module>
     </modules>
 

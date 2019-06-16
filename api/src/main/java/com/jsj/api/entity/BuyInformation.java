@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BuyInformation {
-
-    private String userId;
-
-    private String productId;
+    private Long userId;
+    private Long productId;
+    private Integer buyNumber;
 }
