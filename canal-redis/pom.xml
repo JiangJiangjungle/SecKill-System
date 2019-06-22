@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.jsj.seckill-system</groupId>
             <artifactId>api</artifactId>
-            <version>${sec-kill.version}</version>
+            <version>${api.version}</version>
         </dependency>
         <!-- 引入Web模块 -->
         <dependency>

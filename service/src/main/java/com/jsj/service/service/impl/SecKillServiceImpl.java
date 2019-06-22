@@ -5,6 +5,8 @@ import com.jsj.api.entity.RecordDO;
 import com.jsj.api.exception.DAOException;
 import com.jsj.api.exception.ServiceException;
 import com.jsj.api.service.SecKillService;
+import com.jsj.api.util.CacheUtil;
+import com.jsj.service.config.RedisConfig;
 import com.jsj.service.dao.ProductMapper;
 import com.jsj.service.dao.RecordMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.util.Date;
 
@@ -23,13 +28,11 @@ public class SecKillServiceImpl implements SecKillService, ApplicationContextAwa
     private ProductMapper productMapper;
     @Autowired
     private RecordMapper recordMapper;
-//    @Autowired
-//    private RedisConfig redisConfig;
-//    @Autowired
-//    private ZooKeeperConfig zooKeeperConfig;
-//
-//    @Autowired
-//    private RecordService recordService;
+    @Autowired
+    private RedisConfig redisConfig;
+
+    @Autowired
+    private CacheUtil<Jedis> jedisCacheUtil;
     /**
      * 自己的代理对象
      */
@@ -155,6 +158,7 @@ public class SecKillServiceImpl implements SecKillService, ApplicationContextAwa
 //    }
 //
 
+    @Transactional(rollbackFor = ServiceException.class, propagation = Propagation.REQUIRED)
     @Override
     public boolean decreaseStockAndAddRecord(Long userId, Long productId, Boolean optimisticLock) throws ServiceException {
         boolean updated;
@@ -225,10 +229,27 @@ public class SecKillServiceImpl implements SecKillService, ApplicationContextAwa
 //    }
 //
 
+
     @Override
     public BuyResultEnum handle(Long userId, Long productId, Integer buyNumber, Boolean optimisticLock) throws ServiceException {
-        boolean updated = this.proxy.decreaseStockAndAddRecord(userId, productId, optimisticLock);
-        BuyResultEnum resultEnum = updated ? BuyResultEnum.SUCCESS : BuyResultEnum.FAIL;
+        BuyResultEnum resultEnum;
+        try (Jedis jedis = jedisCacheUtil.getResource()) {
+            //检查该用户是否已经抢购过此物品
+            if (jedis.sismember(redisConfig.getProductUserListPrefix() + productId, String.valueOf(userId))) {
+                resultEnum = BuyResultEnum.REPEAT;
+            } else {
+                String stockValue = jedis.get(redisConfig.getProductStockPrefix() + productId);
+                if (stockValue!=null&&Integer.parseInt(stockValue) > 0) {
+                    //检测缓存中的库存是否足够
+                    resultEnum = this.proxy.decreaseStockAndAddRecord(userId, productId, optimisticLock) ? BuyResultEnum.SUCCESS : BuyResultEnum.FAIL;
+                    if (resultEnum == BuyResultEnum.SUCCESS) {
+                        jedis.sadd(redisConfig.getProductUserListPrefix() + productId, String.valueOf(userId));
+                    }
+                } else {
+                    resultEnum = BuyResultEnum.FAIL;
+                }
+            }
+        }
         log.info("Sec-Kill result：[{}]，userId: [{}]", resultEnum.getLabel(), userId);
         return resultEnum;
     }

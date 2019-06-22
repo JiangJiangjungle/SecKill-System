@@ -33,14 +33,18 @@ public class RedisConfig {
     @Value("${spring.redis.database}")
     private int database;
 
-    @Value("${data.stock-redis-key}")
-    private String stockRedisKey;
+    @Value("${data.redis.product_stock_prefix}")
+    private String productStockPrefix;
 
-    @Value("${data.id}")
+    @Value("${data.redis.product_user_list_prefix}")
+    private String productUserListPrefix;
+
+    @Value("${data.mysql.tb_product_id}")
     private String id;
 
-    @Value("${data.stock}")
+    @Value("${data.mysql.tb_product_stock}")
     private String stock;
+
 
     @Bean
     public JedisPool initJedisPool() {
@@ -52,85 +56,5 @@ public class RedisConfig {
         poolConfig.setTestOnReturn(true);
         poolConfig.setBlockWhenExhausted(true);
         return new JedisPool(poolConfig, host, port, timeout);
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public int getMaxIdle() {
-        return maxIdle;
-    }
-
-    public void setMaxIdle(int maxIdle) {
-        this.maxIdle = maxIdle;
-    }
-
-    public int getMinIdle() {
-        return minIdle;
-    }
-
-    public void setMinIdle(int minIdle) {
-        this.minIdle = minIdle;
-    }
-
-    public int getMaxActive() {
-        return maxActive;
-    }
-
-    public void setMaxActive(int maxActive) {
-        this.maxActive = maxActive;
-    }
-
-    public int getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
-    public int getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(int database) {
-        this.database = database;
-    }
-
-    public String getStockRedisKey() {
-        return stockRedisKey;
-    }
-
-    public void setStockRedisKey(String stockRedisKey) {
-        this.stockRedisKey = stockRedisKey;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getStock() {
-        return stock;
-    }
-
-    public void setStock(String stock) {
-        this.stock = stock;
     }
 }

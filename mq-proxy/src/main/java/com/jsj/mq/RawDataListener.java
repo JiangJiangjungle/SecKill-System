@@ -2,6 +2,7 @@ package com.jsj.mq;
 
 import com.jsj.api.BuyResultEnum;
 import com.jsj.api.entity.SecKillRequest;
+import com.jsj.api.entity.SecKillResponse;
 import com.jsj.api.util.JSONSerializer;
 import com.jsj.api.util.Serializer;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,8 @@ public class RawDataListener {
     @KafkaListener(topics = {"${spring.kafka.consumer.response-topic}"})
     public void listen(ConsumerRecord<?, ?> record, Acknowledgment ack) throws IOException {
         String value = (String) record.value();
-        BuyResultEnum buyResultEnum = serializer.deserialize(value, BuyResultEnum.class);
-        log.info("Get buyResultEnum: " + buyResultEnum.toString());
+        SecKillResponse response = serializer.deserialize(value, SecKillResponse.class);
+        log.info("Get SecKillResponse: " + response.toString());
         //todo 给客户端返回秒杀结果
         //提交
         ack.acknowledge();

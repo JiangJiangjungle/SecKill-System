@@ -1,7 +1,7 @@
 package com.jsj.canal.dao;
 
-import com.jsj.service.exception.DAOException;
-import com.jsj.service.pojo.entity.RecordDO;
+import com.jsj.api.entity.RecordDO;
+import com.jsj.api.exception.DAOException;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -13,10 +13,6 @@ import java.util.List;
  */
 @Repository
 public interface RecordMapper {
-
-    boolean addRecord(RecordDO recordDO) throws DAOException;
-
-    RecordDO getRecordById(Integer id) throws DAOException;
 
     List<RecordDO> getAllRecords(@Param("start") int start, @Param("end") int end) throws DAOException;
 }

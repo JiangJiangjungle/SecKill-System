@@ -5,9 +5,9 @@ import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.CanalEntry.*;
 import com.alibaba.otter.canal.protocol.Message;
-import com.jsj.service.exception.DAOException;
-import com.jsj.service.pojo.entity.ProductDO;
-import com.jsj.service.pojo.entity.RecordDO;
+import com.jsj.api.entity.ProductDO;
+import com.jsj.api.entity.RecordDO;
+import com.jsj.api.exception.DAOException;
 import com.jsj.canal.config.CanalServerConfig;
 import com.jsj.canal.config.RedisConfig;
 import com.jsj.canal.dao.ProductMapper;
@@ -30,6 +30,7 @@ public class RedisDataUpater {
      * 分页查询限制
      */
     public final int LIMIT_MAX = 1000;
+
     @Autowired
     private CanalServerConfig canalServerConfig;
     @Autowired
@@ -88,7 +89,6 @@ public class RedisDataUpater {
         log.info("刷新缓存");
         List<RecordDO> recordDOList;
         List<ProductDO> productDOList;
-        Map<String, String> stocksMap;
         try {
             //加载交易记录
             do {
@@ -96,11 +96,11 @@ public class RedisDataUpater {
                 if (recordDOList == null || recordDOList.isEmpty()) {
                     break;
                 }
-                recordDOList.forEach((RecordDO recordDO) -> jedis.sadd(recordDO.getProductId(), recordDO.getUserId()));
-                log.info("加载交易记录第" + count + "-" + (count + recordDOList.size()) + "项到redis缓存");
+                recordDOList.forEach((RecordDO recordDO) -> jedis.sadd(redisConfig.getProductUserListPrefix()
+                        + recordDO.getProductId(), String.valueOf(recordDO.getUserId())));
+                log.info("加载用户秒杀记录，第" + count + "-" + (count + recordDOList.size()) + "项到redis缓存");
                 count += LIMIT_MAX;
             } while (recordDOList.size() == LIMIT_MAX);
-
             //加载库存记录
             count = 0;
             do {
@@ -108,12 +108,10 @@ public class RedisDataUpater {
                 if (productDOList == null || productDOList.isEmpty()) {
                     break;
                 }
-                stocksMap = new HashMap<>(productDOList.size());
                 for (ProductDO productDO : productDOList) {
-                    stocksMap.put(productDO.getId(), String.valueOf(productDO.getStock()));
+                    jedis.set(redisConfig.getProductStockPrefix() + productDO.getId(), String.valueOf(productDO.getStock()));
                 }
-                jedis.hmset(redisConfig.getStockRedisKey(), stocksMap);
-                log.info("加载库存记录第" + count + "-" + (count + stocksMap.size()) + "项到redis缓存");
+                log.info("加载库存记录第" + count + "-" + (count + productDOList.size()) + "项到redis缓存");
                 count += LIMIT_MAX;
             } while (productDOList.size() == LIMIT_MAX);
         } catch (DAOException d) {
@@ -154,7 +152,7 @@ public class RedisDataUpater {
                     }
                     if (needUpdate) {
                         // 更新缓存中的库存数量
-                        jedis.hset(redisConfig.getStockRedisKey(), productId, stock);
+                        jedis.set(redisConfig.getProductStockPrefix() + productId, stock);
                         log.info("商品id：{} ,redis的库存更新：{}", productId, stock);
                     }
                 }

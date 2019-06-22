@@ -40,7 +40,10 @@ canal-server:
 #自定义配置
 data:
   #mysql表的商品字段
-  id: id
-  stock: stock
-  #redis库存hash表的key
-  stock-redis-key: product_stocks
+  mysql:
+    tb_product_id: id
+    tb_product_stock: stock
+  #redis库存的key
+  redis:
+    product_user_list_prefix: 'sec_kill_product_user_list:'
+    product_stock_prefix: 'sec_kill_product_stock:'

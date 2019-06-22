@@ -28,8 +28,7 @@ public class ProxyController {
 
     @PostMapping("")
     public String secKill(@RequestBody BuyInformation buyInformation) throws Exception {
-        SecKillRequest request = new SecKillRequest(System.currentTimeMillis(), buyInformation.getUserId(),
-                buyInformation.getProductId(), buyInformation.getBuyNumber());
+        SecKillRequest request = new SecKillRequest(System.currentTimeMillis(), buyInformation);
         byte[] buf = serializer.serialize(request);
         //同步模式发送消息
         kafkaTemplate.send(requestTopic, new String(buf)).get();

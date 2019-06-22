@@ -1,4 +1,4 @@
-package com.jsj.service.common;
+package com.jsj.service.config;
 
 
 import lombok.Data;
@@ -27,14 +27,10 @@ public class RedisConfig {
     @Value("${spring.redis.database}")
     private int database;
 
-//    @Value("${data.stock-hash-key}")
-//    private String stockHashKey;
-//    @Value("${data.redis-lock-key}")
-//    private String redisLockKey;
-    /**
-     * 分页查询限制
-     */
-    public final int LIMIT_MAX = 1000;
+    @Value("${data.redis.product_user_list_prefix}")
+    private String productUserListPrefix;
+    @Value("${data.redis.product_stock_prefix}")
+    private String productStockPrefix;
 
     @Bean
     public JedisPool jedisPool() {

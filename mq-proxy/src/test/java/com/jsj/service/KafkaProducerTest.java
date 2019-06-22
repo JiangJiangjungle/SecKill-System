@@ -1,5 +1,6 @@
 package com.jsj.service;
 
+import com.jsj.api.entity.BuyInformation;
 import com.jsj.api.entity.SecKillRequest;
 import com.jsj.api.util.JSONSerializer;
 import com.jsj.api.util.Serializer;
@@ -22,7 +23,7 @@ public class KafkaProducerTest {
         SecKillRequest request;
         Serializer serializer = new JSONSerializer();
         for (int i = 1; i <= 500; i++) {
-            request = new SecKillRequest(System.currentTimeMillis(), 1L, 1L, 1);
+            request = new SecKillRequest(System.currentTimeMillis(), new BuyInformation(1L, 1l, 1));
             byte[] buf = serializer.serialize(request);
             String msg = new String(buf);
             kafkaTemplate.send("result", msg);

@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * @author jiangshenjie
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SecKillRequest implements Serializable {
     Long id;
-    Long userId;
-    Long productId;
-    Integer buyNumber;
+    BuyInformation buyInformation;
 }
