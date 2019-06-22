@@ -1,23 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.jsj.seckill-system</groupId>
         <artifactId>parent</artifactId>
+        <groupId>com.jsj.seckill-system</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>canal-redis</artifactId>
-    <version>${sec-kill.version}</version>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>binlog-listener</artifactId>
+    <version>${binlog-listener.version}</version>
     <packaging>jar</packaging>
 
     <properties>
-        <fastjson.version>1.2.31</fastjson.version>
-        <druid.version>1.0.18</druid.version>
-        <mysql-connector-java.version>5.1.39</mysql-connector-java.version>
-        <mybatis-spring-boot-starter.version>1.1.1</mybatis-spring-boot-starter.version>
-        <spring-boot-starter-redis.version>1.4.1.RELEASE</spring-boot-starter-redis.version>
         <version.canal>1.0.12</version.canal>
     </properties>
 
@@ -76,5 +72,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

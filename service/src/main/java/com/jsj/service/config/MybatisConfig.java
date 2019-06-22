@@ -1,8 +1,8 @@
 //package com.jsj.service.config;
 //
-//import com.jsj.api.dao.ProductMapper;
-//import com.jsj.api.dao.RecordMapper;
-//import com.jsj.api.dao.UserMapper;
+//import com.jsj.api.mappers.ProductMapper;
+//import com.jsj.api.mappers.RecordMapper;
+//import com.jsj.api.mappers.UserMapper;
 //import org.apache.ibatis.session.SqlSessionFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;

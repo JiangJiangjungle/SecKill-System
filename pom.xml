@@ -25,7 +25,7 @@
         <!-- 应用层 -->
         <module>service</module>
         <!-- binlog监听 -->
-        <module>canal-redis</module>
+        <module>binlog-listener</module>
     </modules>
 
     <properties>
@@ -33,9 +33,15 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+        <spring-boot-starter-redis.version>1.4.1.RELEASE</spring-boot-starter-redis.version>
+        <fastjson.version>1.2.31</fastjson.version>
+        <druid.version>1.0.18</druid.version>
+        <mysql-connector-java.version>5.1.39</mysql-connector-java.version>
+        <mybatis-spring-boot-starter.version>1.1.1</mybatis-spring-boot-starter.version>
+        <zookeeper.version>3.3.6</zookeeper.version>
         <service.version>1.0-SNAPSHOT</service.version>
-        <data-access.version>1.0-SNAPSHOT</data-access.version>
         <api.version>1.0-SNAPSHOT</api.version>
+        <binlog-listener.version>1.0-SNAPSHOT</binlog-listener.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <lombok.version>1.16.6</lombok.version>
         <slf4j-api.version>1.7.21</slf4j-api.version>

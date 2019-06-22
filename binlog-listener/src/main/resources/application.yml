@@ -1,6 +1,6 @@
 spring:
   application:
-    name: canal-redis
+    name: canal-listener
   #数据源
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -25,8 +25,8 @@ spring:
 
 #mybatis
 mybatis:
-  mapper-locations: classpath:data.mappers/*.xml
-  type-aliases-package: com.jsj.service.data.pojo.entity
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.jsj.api.entity
 
 #canal-server配置信息
 canal-server:

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.jsj.api.dao.RecordMapper">
+<mapper namespace="com.jsj.canal.dao.RecordMapper">
 
     <resultMap id="myRecord" type="com.jsj.api.entity.RecordDO">
         <id column="id" property="id"/>

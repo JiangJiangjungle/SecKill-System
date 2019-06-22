@@ -67,16 +67,3 @@ data:
   redis:
     product_user_list_prefix: 'sec_kill_product_user_list:'
     product_stock_prefix: 'sec_kill_product_stock:'
-#  #redis库存hash表的key
-#  stock-hash-key: product_stocks
-#  #redis分布式锁的key
-#  redis-lock-key: panic_buy_lock
-#  #zookeeper
-#  zookeeper:
-#    host: 139.9.77.156
-#    port: 2181
-#    timeout: 2000
-#    #分布锁的根节点
-#    lock-namespace: /panic_buy
-#    #分布锁的key
-#    lock-key: panic_buy_lock
