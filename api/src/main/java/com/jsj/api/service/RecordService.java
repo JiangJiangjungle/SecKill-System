@@ -11,16 +11,6 @@ import com.jsj.api.exception.ServiceException;
 public interface RecordService {
 
     /**
-     * todo 发送交易记录到消息队列
-     * @param userId
-     * @param productId
-     * @param state
-     * @return
-     * @throws ServiceException
-     */
-    void sendRecordToMessageQueue(Long userId, Long productId, Integer state) throws ServiceException;
-
-    /**
      * 直接新增交易记录
      *
      * @return

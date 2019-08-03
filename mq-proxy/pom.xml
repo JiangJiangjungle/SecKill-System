@@ -53,6 +53,12 @@
             <artifactId>kafka_2.10</artifactId>
             <version>0.10.0.1</version>
         </dependency>
+        <!--redis缓存支持-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
+            <version>${spring-boot-starter-redis.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

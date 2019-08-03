@@ -1,4 +1,4 @@
-package com.jsj.service.util.impl;
+package com.jsj.mq.util;
 
 import com.jsj.api.util.CacheUtil;
 import lombok.extern.slf4j.Slf4j;

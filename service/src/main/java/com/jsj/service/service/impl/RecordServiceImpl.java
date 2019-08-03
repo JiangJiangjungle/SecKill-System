@@ -10,27 +10,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+/**
+ * @author jiangshenjie
+ */
 @Service("recordService")
 public class RecordServiceImpl implements RecordService {
     @Autowired
     private RecordMapper recordMapper;
-
-//    @Autowired
-//    private KafkaUtils kafkaUtils;
-
-    @Override
-    public void sendRecordToMessageQueue(Long userId, Long productId, Integer state) throws ServiceException {
-//        RecordDO recordDO = new RecordDO();
-//        recordDO.setCreateTime(new Date());
-//        recordDO.setProductId(productId);
-//        recordDO.setState(state);
-//        recordDO.setUserId(userId);
-//        try {
-//            kafkaUtils.send(recordDO);
-//        } catch (Exception e) {
-//            throw new ServiceException(e.getMessage());
-//        }
-    }
 
     @Override
     public boolean addRecord(Long userId, Long productId, Integer state) throws ServiceException {

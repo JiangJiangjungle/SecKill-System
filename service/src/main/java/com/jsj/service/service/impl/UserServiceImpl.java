@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    //    @Transactional(rollbackFor = ServiceException.class)
     @Override
     public UserDO searchUserById(Long id) throws ServiceException {
         try {
@@ -31,7 +30,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    //    @Transactional(rollbackFor = ServiceException.class)
     @Override
     public boolean addUser(String userName, String phone) throws ServiceException {
         if (StringUtils.isEmpty(userName)) {

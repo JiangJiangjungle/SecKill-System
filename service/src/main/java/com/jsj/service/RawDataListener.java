@@ -3,7 +3,6 @@ package com.jsj.service;
 import com.jsj.api.BuyResultEnum;
 import com.jsj.api.entity.BuyInformation;
 import com.jsj.api.entity.SecKillRequest;
-import com.jsj.api.entity.SecKillResponse;
 import com.jsj.api.service.SecKillService;
 import com.jsj.api.util.JSONSerializer;
 import com.jsj.api.util.Serializer;
@@ -25,15 +24,15 @@ import java.io.IOException;
 @Component
 public class RawDataListener {
     private Serializer serializer = new JSONSerializer();
-    @Value("${spring.kafka.consumer.response-topic}")
-    String responseTopic;
+//    @Value("${spring.kafka.consumer.response-topic}")
+//    String responseTopic;
     @Autowired
     KafkaTemplate kafkaTemplate;
     @Autowired
     SecKillService secKillService;
 
     /**
-     * 实时获取kafka数据，并进行业务处理,再发送秒杀结果消息
+     * 读取kafka数据，并进行业务处理
      *
      * @param record
      * @throws IOException
@@ -45,13 +44,14 @@ public class RawDataListener {
         log.info("Get request: [{}]", request.toString());
         try {
             BuyInformation buyInformation = request.getBuyInformation();
-            BuyResultEnum resultEnum = secKillService.handle(buyInformation.getUserId(), buyInformation.getProductId(),
+            BuyResultEnum buyResultEnum = secKillService.handle(buyInformation.getUserId(), buyInformation.getProductId(),
                     buyInformation.getBuyNumber(), false);
-            //同步发送秒杀结果消息
-            SecKillResponse response = new SecKillResponse(System.currentTimeMillis(), buyInformation, resultEnum);
-            kafkaTemplate.send(responseTopic, new String(serializer.serialize(response))).get();
-            //请求消费手动提交
-            ack.acknowledge();
+//            //同步发送秒杀结果消息
+//            SecKillResponse response = new SecKillResponse(System.currentTimeMillis(), buyInformation, resultEnum);
+//            kafkaTemplate.send(responseTopic, new String(serializer.serialize(response))).get();
+//            //请求消费手动提交
+//            ack.acknowledge();
+            log.info("BuyResultEnum: [{}]", buyResultEnum.toString());
         } catch (Exception s) {
             log.error(s.toString());
         }

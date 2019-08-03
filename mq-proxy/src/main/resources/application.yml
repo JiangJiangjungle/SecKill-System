@@ -35,3 +35,21 @@ spring:
       max-poll-interval-ms: 5000
       #在单次调用poll()中返回的最大记录数。
       max-poll-records: 1
+  #redis缓存
+  redis:
+    database: 0
+    host: 119.23.204.78
+    port: 6379
+    jedis:
+      pool:
+        #连接池最大连接数
+        max-active: 2000
+        #连接池中的最大空闲连接
+        max-idle: 200
+        #连接池中的最小空闲连接
+        min-idle: 5
+    timeout: 3000
+#自定义配置
+data:
+  redis:
+    product_user_list_prefix: 'sec_kill_product_user_list:'
