@@ -122,20 +122,20 @@ public class RedisDataUpater {
             if (entry.getEntryType() == EntryType.TRANSACTIONBEGIN || entry.getEntryType() == EntryType.TRANSACTIONEND) {
                 continue;
             }
-            RowChange rowChage = null;
+            RowChange rowChange = null;
             try {
-                rowChage = RowChange.parseFrom(entry.getStoreValue());
+                rowChange = RowChange.parseFrom(entry.getStoreValue());
             } catch (Exception e) {
                 throw new RuntimeException("ERROR ## parser of eromanga-event has an error , data:" + entry.toString(),
                         e);
             }
-            CanalEntry.EventType eventType = rowChage.getEventType();
+            CanalEntry.EventType eventType = rowChange.getEventType();
             Header header = entry.getHeader();
             log.info("======>binlog[{}:{}] , name[{},{}] , eventType : {}", header.getLogfileName(),
                     header.getLogfileOffset(), header.getSchemaName(), header.getTableName(), eventType);
             //检查update记录
             if (eventType == EventType.UPDATE) {
-                for (RowData rowData : rowChage.getRowDatasList()) {
+                for (RowData rowData : rowChange.getRowDatasList()) {
                     List<Column> columns = rowData.getAfterColumnsList();
                     String productId = null;
                     String stock = null;
