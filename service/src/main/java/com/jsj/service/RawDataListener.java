@@ -41,16 +41,13 @@ public class RawDataListener {
     public void listen(ConsumerRecord<?, ?> record, Acknowledgment ack) throws IOException {
         String value = (String) record.value();
         SecKillRequest request = serializer.deserialize(value, SecKillRequest.class);
+        //手动ack
+        ack.acknowledge();
         log.info("Get request: [{}]", request.toString());
         try {
             BuyInformation buyInformation = request.getBuyInformation();
             BuyResultEnum buyResultEnum = secKillService.handle(buyInformation.getUserId(), buyInformation.getProductId(),
                     buyInformation.getBuyNumber(), false);
-//            //同步发送秒杀结果消息
-//            SecKillResponse response = new SecKillResponse(System.currentTimeMillis(), buyInformation, resultEnum);
-//            kafkaTemplate.send(responseTopic, new String(serializer.serialize(response))).get();
-//            //请求消费手动提交
-//            ack.acknowledge();
             log.info("BuyResultEnum: [{}]", buyResultEnum.toString());
         } catch (Exception s) {
             log.error(s.toString());

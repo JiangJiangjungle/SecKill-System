@@ -1,6 +1,5 @@
 package com.jsj.service.dao;
 
-import com.jsj.api.dao.UserMapper;
 import com.jsj.api.entity.UserDO;
 import com.jsj.api.exception.DAOException;
 import com.jsj.service.ServiceApplication;

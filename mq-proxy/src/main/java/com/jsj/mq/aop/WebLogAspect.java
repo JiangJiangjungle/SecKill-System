@@ -49,7 +49,7 @@ public class WebLogAspect {
             o = proceedingJoinPoint.proceed();
             log.info("Response , IP：[{}]，path: [{}]，method：[{}]，params：[{}] stateCode: [{}], response: [{}]",
                     request.getRemoteAddr(), request.getRequestURI(), request.getMethod(),
-                    Arrays.toString(proceedingJoinPoint.getArgs()), response.getStatus(), o);
+                    Arrays.toString(proceedingJoinPoint.getArgs()), response.getStatus(), o.toString());
         } catch (Throwable e) {
             log.error("Exception, IP：[{}]，path: [{}]，method：[{}]，params：[{}], message: [{}]",
                     request.getRemoteAddr(), request.getRequestURI(), request.getMethod(),
