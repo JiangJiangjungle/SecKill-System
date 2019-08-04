@@ -35,14 +35,16 @@ canal-server:
   destination: example
   username:
   password:
-  subscribe: .*\..*
+  subscribe: .*\..*,sec_kill.tb_product,sec_kill.tb_record
 
 #自定义配置
 data:
   #mysql表的商品字段
-  mysql:
+  canal-subscribe:
     tb_product_id: id
     tb_product_stock: stock
+    tb_record_user_id: user_id
+    tb_record_product_id: product_id
   #redis库存的key
   redis:
     product_user_list_prefix: 'sec_kill_product_user_list:'

@@ -64,7 +64,6 @@ public class SecKillServiceImpl implements SecKillService, ApplicationContextAwa
         return updated;
     }
 
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     @Override
     public BuyResultEnum handle(Long userId, Long productId, Integer buyNumber, Boolean optimisticLock) throws ServiceException {
         BuyResultEnum resultEnum;
@@ -80,9 +79,6 @@ public class SecKillServiceImpl implements SecKillService, ApplicationContextAwa
             //检测缓存中的库存是否足够
             resultEnum = this.proxy.decreaseStockAndAddRecord(userId, productId, optimisticLock) ?
                     BuyResultEnum.SUCCESS : BuyResultEnum.FAIL;
-            if (resultEnum == BuyResultEnum.SUCCESS) {
-                jedis.sadd(redisConfig.getProductUserListPrefix() + productId, String.valueOf(userId));
-            }
         }
         return resultEnum;
     }

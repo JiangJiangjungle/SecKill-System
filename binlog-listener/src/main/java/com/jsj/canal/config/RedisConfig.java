@@ -38,12 +38,6 @@ public class RedisConfig {
     @Value("${data.redis.product_user_list_prefix}")
     private String productUserListPrefix;
 
-    @Value("${data.mysql.tb_product_id}")
-    private String id;
-
-    @Value("${data.mysql.tb_product_stock}")
-    private String stock;
-
 
     @Bean
     public JedisPool initJedisPool() {
